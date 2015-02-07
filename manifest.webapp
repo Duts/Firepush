@@ -1,0 +1,25 @@
+{
+	"name": "Pushbullet",
+	"description": "This is a porting for FirefoxOS of Pushbullet. Actually is an Unoffical version.",
+	"launch_path": "/index.html",
+	"installs_allowed_from": ["*"],
+	"fullscreen": "false",
+	"default_locate": "en",
+	"orientation": ["portrait","landscape"],
+	"version" : "0.1",
+	"icons": {
+		"16": "Pushbuleet/images/icon16.png",
+		"32": "Pushbuleet/images/icon32.png",
+		"48": "Pushbuleet/images/icon48.png",
+		"64": "Pushbuleet/images/icon64.png",
+		"128": "Pushbuleet/images/icon128.png"
+	},
+	"developer":{
+		"name": "{Duts} - Robert Halandut",
+		"url": "https://www.github.com/RDuts"
+	},
+	"permissions": {
+    "desktop-notification": "granted"
+}
+
+}

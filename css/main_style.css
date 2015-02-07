@@ -1,0 +1,441 @@
+
+html, body {
+        width: auto;
+        height: 100%;
+  
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 300;
+        background: linear-gradient(to bottom, #6EC17C, #56B76E) repeat scroll 0% 0% transparent;
+/*#0095b7   #34495e;*/
+        box-sizing: border-box;
+
+        /*overflow: hidden;*/
+      }
+.im{
+  margin-top: 5px;
+  margin-left: 5px;
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+}
+.im_push{
+  margin-top: 5px;
+  height: auto;
+  width: auto;
+  max-height: 50%; 
+}
+
+#file_s{
+  margin-top: -100px;
+}
+
+.push_container_style{
+  height: auto;
+  width: auto;
+  margin-bottom: 5px;
+  background-color: #fefefe;
+}
+      .app-bar {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        
+        width: 100%;
+        height: 60px;
+
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+
+        position: fixed;
+
+        top: 0;
+        left: 0;
+
+        z-index:2;
+      }
+
+      .app-bar.open {
+        -webkit-transform: translate(250px,0);
+        transform: translate(250px,0);
+      }
+
+      .app-bar .logo {
+        -ms-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
+        
+        font-size: 20px;
+        line-height: 60px;
+        
+        margin: 0 16px;
+        
+        color: #fefefe;
+        float: none;
+        max-width: none;
+      }
+
+      .app-bar .logo a {
+        text-decoration: none;
+        color: inherit;
+        font-weight: normal;
+      }
+
+      .app-bar-actions  {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+      }
+
+      .app-bar button, .bottom-bar button {
+        width: 44px;
+        height: 44px;
+        
+        background-image: none;
+        background-color: transparent;
+        
+        border-style: solid;
+        border-radius: 100%;
+        border-color: rgb(254, 254, 254);
+
+        padding: 8px;
+        margin: 8px;
+
+        -webkit-transition: border 300ms ease-in,background 300ms ease-in;
+        transition: border 300ms ease-in,background 300ms ease-in;
+
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .app-bar button img {
+        width: 28px;
+        height: 28px;
+      }
+
+      .app-bar button.menu {
+        position: relative;
+      }
+
+      .app-bar button.menu img {
+        position: absolute;
+
+        top: 7px;
+        left: 7px;
+      }
+
+      .app-bar button.menu .menu-icon {
+        opacity: 1.0;
+      }
+
+      .app-bar button.menu .close-icon {
+        opacity: 0.0;
+      }
+
+      .app-bar.open button.menu .menu-icon {
+        opacity: 0.0;
+      }
+
+      .app-bar.open button.menu .close-icon {
+        opacity: 1.0;
+      }
+
+      .app-bar button:hover, .bottom-bar button:hover {
+        border-color: transparent;
+        background-color: rgba(254, 254, 254, 0.4);
+      }
+
+      .app-bar button:focus, .bottom-bar button:focus {
+        border-color: transparent;
+        outline: 0;
+        background-color: rgba(254, 254, 254, 0.4);
+      }
+
+      .app-bar button:active, .bottom-bar button:active {
+        border-color: transparent;
+        background-color: rgba(254, 254, 254, 0.6);
+      }
+
+      .search {
+        display: none;
+        
+        width: 400px;
+        height: 60px;
+        
+        padding: 16px;
+        margin: 0;
+        
+        box-sizing: border-box;
+        
+        border: none;
+      }
+
+      .bottom-bar {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        
+        width: 100%;
+        height: 60px;
+
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+
+        position: fixed;
+
+        bottom: 0;
+        left: 0;
+
+        background-color: rgba(0,0,0,0.6);
+      }
+
+      @media all and (min-width: 1200px) {
+        
+        body {
+          padding: 16px;
+        }
+        
+        .app-bar {
+          display: block;
+          
+          position: initial;
+
+          height: 130px;
+          
+          padding: 0 16px;
+          margin-bottom: 16px;
+          
+          box-sizing: border-box;
+          
+          background-color: transparent;
+
+          -webkit-transform: translate(0,0);
+          transform: translate(0,0);
+
+          -webkit-transition: none;
+          transition: none;
+        }
+
+        .app-bar.open {
+          -webkit-transform: translate(0,0);
+          transform: translate(0,0);
+        }
+        
+        .app-bar .logo {
+          float: left;
+          
+          margin: 0;
+          
+          font-size: 100px;  
+          line-height: 130px;
+        }
+        
+        .app-bar-actions {
+          float: right;
+          
+          margin: 35px 0;
+        }
+        
+        .app-bar:after {
+          content: ' ';
+          
+          display:block;
+          height: 0;
+          /*overflow: hidden;*/
+          
+          clear: both;
+        }
+        
+        .search {
+          display: block;
+          
+          padding-left: 16px;
+        }
+        
+        button.menu {
+          display: none;
+        }
+        
+        .bottom-bar {
+          display: -ms-inline-flexbox;
+          display: -webkit-inline-flex;
+          display: inline-flex;
+          
+          width: auto;
+          height: auto;
+
+          -ms-flex-direction: column;
+          -webkit-flex-direction: column;
+          flex-direction: column;
+
+          position: initial;
+
+          float: left;
+
+          margin-top: 16px;
+
+          background-color: rgba(0,0,0,0.6);
+        }
+      }
+
+      .navdrawer-container {
+        position: fixed;
+        overflow: scroll;
+        width: 250px;
+        height: 100%;
+        
+        background-color:#CAD9BD;
+        /*#0095b7*/
+        color: #0095b7;
+
+        -webkit-transform: translate(-250px,0);
+        transform: translate(-250px,0);
+
+        z-index: 2;
+      }
+
+      .navdrawer-container.open {
+        -webkit-transform: translate(0,0);
+        transform: translate(0,0);
+      }
+
+      .navdrawer-container ul {
+        list-style-type: none;
+      }
+
+      #files {
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAC1SURBVCiRpZK9DYNADIW/h6iBIaiyAQ2bRBSsQpER0qeKlBHSMwIFE1BmAqfAKD+6Q4E86Ulnn5919j2ZGSFIEnDx8GixQjMLEugAc3bRuoi4ASbg6pyA5qcGQA08gAo4OSvP1d/1SWCqA9CaWf82Zg+0fveBNLCTc2RXt1A+9IJN+L+BpHKvWFKZAIOkbIc4A4aUeZGxUe4rPRLXYkARc9qKUwvAlm/MZ+tvQr4cRl6e38rxCctBtQxaTji/AAAAAElFTkSuQmCC6c938504a8c759cd5ac128ace76befb3') no-repeat;
+        width: 60px;
+        height: 35px;
+        float: right;
+        margin-right: 55%;
+        margin-top: 10%;
+      }
+      #files input {
+         filter: alpha(opacity=0);
+         opacity: 0;
+      }
+      .navdrawer-bg {
+        position: fixed;
+
+        width: 100%;
+        height: 100%;
+
+        left: 0;
+        top: 0;
+
+        background-color: black;
+
+        /** Unfortunately this is the best way
+        to get no paints in Chrome **/
+        opacity: 0.0000001;
+
+        z-index: 1;
+
+        pointer-events: none;
+      }
+
+      .navdrawer-bg.open {
+        opacity: 0.5;
+      }
+
+      .app-bar, .navdrawer-container {
+        -webkit-transition: -webkit-transform 0.3s ease-out;
+        transition: transform 0.3s ease-out;
+      }
+
+      .navdrawer-bg {
+        -webkit-transition: opacity 0.3s ease-out;
+        transition: opacity 0.3s ease-out;
+      }
+
+      .navdrawer-container ul li a {
+        display: block;
+        
+        height: 60px;
+        
+        padding: 0 20px;
+        
+        line-height: 60px;
+        
+        text-decoration: none;
+        color: #413D3D;
+      }
+
+      .navdrawer-container ul li a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .navdrawer-container ul li a:focus {
+        background-color: rgba(255, 255, 255, 0.3);
+        outline: 0;
+      }
+
+      .navdrawer-container ul li a:active {
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+
+      @media all and (min-width: 1200px) {
+        .navdrawer-container {
+          position: initial;
+          
+          width: 100%;
+          height: auto;
+          
+          -webkit-transform: translate(0,0);
+          transform: translate(0,0);
+          
+          -webkit-transition: none;
+          transition: none;
+
+          pointer-events: auto;
+        }
+
+        .navdrawer-container ul {
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          display: flex;
+          
+          -ms-flex-direction: row;
+          -webkit-flex-direction: row;
+          flex-direction: row;
+        }
+        
+        .navdrawer-container ul li {
+          border: none;
+        }
+
+        .navdrawer-bg, .navdrawer-bg.open {
+          opacity: 0;
+
+          pointer-events: none;
+        }
+      }
+.color_bar{
+background-color: rgba(0, 0, 0, 0.39);
+}
+      .promote-layer {
+        /*
+        This may promote the layer to a composited
+        layer.
+
+        Replace with will-change when available
+
+        #perfmatters
+        */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }

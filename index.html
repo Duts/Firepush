@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="cleartype" content="on">
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/second.css">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:light,regular,medium,thin,italic,mediumitalic,bold" title="roboto">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/main_style.css">
+<script type="text/javascript" src="js/request.js"></script>
+
+<title>Pushbullet</title>
+<!-- IE Specific to remove tap highlight -->
+<meta name="msapplication-tap-highlight" content="no">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,300" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<header class="app-bar promote-layer color_bar">
+
+  <button class="menu">
+    <img class="menu-icon" src="images/hamburger.png"> 
+    <img class="close-icon" src="images/close-icon-light.png">
+  </button>
+
+  <h1 class="logo">
+    <a href="#">All</a>
+  </h1>
+    <div id="hello" align="right"></div>
+
+</header>
+<nav class="navdrawer-container">
+
+  <ul class="promote-layer"><label><b>Pushes</b></label>
+    <li>
+      <a onclick="show_note()">Note</a>
+      <div id="notes" style="display:none;">
+        <label>Title:<input type="text" id="note_title"></label>
+        <label>Body:<input type="text" id="note_body"></label>
+        <button onclick="note();">Push</button>
+      </div>
+    </li>
+    <li>
+      <a onclick="show_link();">Link</a>
+      <div id="links" style="display:none;">
+        <label>Title:<input type="text" id="link_title"></label>
+        <label>Body:<input type="text" id="link_body"></label>
+        <label>Link:<input type="url" id="link_url"></label>
+        <button onclick="link();">Push</button>
+      </div>
+    </li>
+<!-- Work in progress
+    <li>
+    <a>File
+      <span id="files">
+        <input type="file" id="file_s" onchange="file();" />
+      </span>
+    </a>
+    </li>
+-->
+    <li>
+      <a href="">Settings</a>
+    </li>
+    <li>
+      <a href="" onclick="logout();">Logout</a>
+    </li>
+  </ul>
+</nav>
+<br />
+<br />
+<br />
+
+<div id="push_container"></div>
+
+
+<script type="text/javascript">
+ //Show some things
+p = document.getElementById("hello").innerHTML = localStorage.getItem("name") + "<br />" + localStorage.getItem("email_user"); 
+</script>
+
+<script>
+var navdrawerContainer = document.querySelector('.navdrawer-container');
+var appbarElement = document.querySelector('.app-bar');
+
+var menuBtn = document.querySelector('.menu');
+menuBtn.addEventListener('click', function() {
+var isOpen = navdrawerContainer.classList.contains('open');
+  if(isOpen) {
+    appbarElement.classList.remove('open');
+    navdrawerContainer.classList.remove('open');
+  } else {
+    appbarElement.classList.add('open');
+    navdrawerContainer.classList.add('open');
+  }
+}, true);
+</script>
+<script>
+var menuBtn = document.querySelector('.menu');
+menuBtn.addEventListener('click', function() {
+}, true);
+
+var bottomBtns = document.querySelectorAll('.bottom-bar > button');
+for(var i = 0; i < bottomBtns.length; i++) {
+  bottomBtns[i].addEventListener('click', bottomBarBtnClick, true);
+}
+</script>
