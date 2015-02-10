@@ -1,12 +1,22 @@
 {
 	"name": "Pushbullet",
-	"description": "This is a porting for FirefoxOS of Pushbullet. Actually is an Unoffical version.",
+	"description": "This is a porting for Firefox OS of Pushbullet. Actually it is an unofficial version.",
 	"launch_path": "/index.html",
 	"installs_allowed_from": ["*"],
 	"fullscreen": "false",
-	"default_locate": "en",
+	"default_locale": "en",
+	"locales": {
+		"eo": {
+			"name": "Pushbullet",
+			"description": "Porto de Pushbullet al Firefox OS. Aktuale ĝi ne estas oficiala versio."
+		},
+		"it": {
+			"name": "Pushbullet",
+			"description": "Port di Pushbullet per Firefox OS. Attualmente non è una versione ufficiale."
+		}
+	},
 	"orientation": ["portrait","landscape"],
-	"version" : "0.1",
+	"version": "0.1",
 	"icons": {
 		"16": "images/icon16.png",
 		"32": "images/icon32.png",
@@ -14,9 +24,8 @@
 		"64": "images/icon64.png",
 		"128": "images/icon128.png"
 	},
-	"developer":{
+	"developer": {
 		"name": "{Duts} - Robert Halandut",
 		"url": "https://www.github.com/RDuts"
 	}
-
 }
