@@ -16,6 +16,18 @@ html, body {
 
         /*overflow: hidden;*/
       }
+
+.trash{
+  float: right;
+}
+#setting_box{
+  margin: 10%;
+  height: 100px;
+  width: 80%;
+  background-color: #f1f1f1;
+  border-radius: 4%;
+  z-index: 9999;
+}
 .im{
   margin-top: 5px;
   margin-left: 5px;

@@ -6,20 +6,15 @@
 <meta http-equiv="cleartype" content="on">
 <link rel="stylesheet" href="css/normalize.css">
 <link rel="stylesheet" href="css/second.css">
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:light,regular,medium,thin,italic,mediumitalic,bold" title="roboto">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/main_style.css">
 <script type="text/javascript" src="js/request.js"></script>
-
 <title>Pushbullet</title>
 <!-- IE Specific to remove tap highlight -->
-<meta name="msapplication-tap-highlight" content="no">
-<link href="https://fonts.googleapis.com/css?family=Roboto:400,300" rel="stylesheet" type="text/css">
-</head>
+<meta name="msapplication-tap-highlight" content="no"></head>
 <body>
 
 <header class="app-bar promote-layer color_bar">
-
   <button class="menu">
     <img class="menu-icon" src="images/hamburger.png"> 
     <img class="close-icon" src="images/close-icon-light.png">
@@ -28,6 +23,7 @@
   <h1 class="logo">
     <a href="#">All</a>
   </h1>
+
     <div id="hello" align="right"></div>
 
 </header>
@@ -51,17 +47,8 @@
         <button onclick="link();">Push</button>
       </div>
     </li>
-<!-- Work in progress
     <li>
-    <a>File
-      <span id="files">
-        <input type="file" id="file_s" onchange="file();" />
-      </span>
-    </a>
-    </li>
--->
-    <li>
-      <a href="">Settings</a>
+      <a href="" id="setting">Settings</a>
     </li>
     <li>
       <a href="" onclick="logout();">Logout</a>
@@ -76,7 +63,7 @@
 
 
 <script type="text/javascript">
- //Show some things
+//Show some things
 p = document.getElementById("hello").innerHTML = localStorage.getItem("name") + "<br />" + localStorage.getItem("email_user"); 
 </script>
 

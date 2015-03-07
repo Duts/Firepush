@@ -42,6 +42,9 @@ push_request.setRequestHeader("Authorization","Bearer "+localStorage.getItem("to
 push_request.send();
 console.log(push_request);
 
+//Contain all iden
+var iden = [];
+
 push_request.onreadystatechange=function()
 {
 	if (push_request.readyState == 4 && push_request.status == 200) {
@@ -50,6 +53,7 @@ push_request.onreadystatechange=function()
 		 	var kid = document.createElement("div");
 		 	kid.setAttribute("class","push_container_style");
 		    var type = parse_push.pushes[i].type;
+		    iden[i] = parse_push.pushes[i].iden;
 
 			if (type == "note") {
 				if (parse_push.pushes[i].title == undefined || parse_push.pushes[i].title == null) {
@@ -78,9 +82,19 @@ push_request.onreadystatechange=function()
 				}else{
 					kid.innerHTML = "<img src='" + localStorage.getItem("avatar") + "' class='im' /><p><a href='" + parse_push.pushes[i].file_url + "' >" + parse_push.pushes[i].file_name + "</a></p>";
 				}
-			 }
-			document.getElementById("push_container").appendChild(kid);
+			}
 
+			//Check if a push is active or not
+			if (parse_push.pushes[i].active == true) {
+			 	var trash = document.createElement("img");
+			 	trash.setAttribute("src","images/trash.png");
+			 	trash.setAttribute("class","trash");
+			 	trash.setAttribute("title",i);
+			 	trash.setAttribute("onclick","del("+i+")");
+				document.getElementById("push_container").appendChild(trash);
+		 	}
+
+			document.getElementById("push_container").appendChild(kid);
 		}
 	}else if(push_request.status == 400 || push_request.status == 401 || push_request.status == 403 || push_request.status == 404){
 		alert(parse_push.error.message);
@@ -89,16 +103,29 @@ push_request.onreadystatechange=function()
 
 
 
-function logout () {
-	localStorage.clear();
-	localStorage.setItem("login","0");
-}
 
 
+//Set value for hide/show menu
+localStorage.setItem("a","0");
 
 function show_note(){
-	show = document.getElementById('notes');
-	show.style = "display: block;";
+	if (localStorage.getItem("a") == 0){
+	document.getElementById('notes').style = "display: block;";
+	localStorage.setItem("a","1");
+	}else{
+		document.getElementById('notes').style = "display: none;"
+		localStorage.setItem("a","0");
+	}
+}
+
+function show_link(){
+	if (localStorage.getItem("a") == 0){
+		document.getElementById('links').style = "display: block;";
+		localStorage.setItem("a","1");
+	}else{
+		document.getElementById('links').style = "display: none;"
+		localStorage.setItem("a","0");
+	}
 }
 
 function note () {
@@ -111,16 +138,9 @@ function note () {
 	var blob = '{"type": "note", "title": "'+title+'", "body": "'+body+'"}';
 	note_req.send(blob);
 	console.log(note_req);
-	title.value = "";
-	body.value = "";
-	show.style = "display: none;";
 	location.reload();
 }
 
-function show_link(){
-	show = document.getElementById('links');
-	show.style = "display: block;";
-}
 
 function link(){
 	title = document.getElementById('link_title').value;
@@ -133,7 +153,21 @@ function link(){
 	var blob = '{"type": "link", "title": "'+title+'", "body": "'+body+'", "url": "'+url+'"}';
 	note_req.send(blob);
 	console.log(note_req);
-	show.style = "display: none;";
 	location.reload();
 }
 
+function del(a) {
+	if (confirm("Would you really delete this push?")){
+		var del = new XMLHttpRequest();
+		del.open("DELETE","https://api.pushbullet.com/v2/pushes/"+iden[a],false);
+		del.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
+		del.send();
+		console.log(del);
+		location.reload();
+	}
+}
+
+function logout () {
+	localStorage.clear();
+	localStorage.setItem("login","0");
+}
