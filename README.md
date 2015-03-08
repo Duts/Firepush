@@ -1,4 +1,4 @@
-Pushbullet for Firefox OS
+Pushbullet for Firefox OS (Unofficial Version)
 
 This project isn't writed by Pushbullet(.com) developers!
 
