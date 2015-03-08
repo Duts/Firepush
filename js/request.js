@@ -167,6 +167,18 @@ function del(a) {
 	}
 }
 
+function del_device(b){
+	if (confirm("Would you really delete this push?")){
+		var del = new XMLHttpRequest();
+		del.open("DELETE","https://api.pushbullet.com/v2/devices/"+iden[a],false);
+		del.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
+		del.send();
+		console.log(del);
+		location.reload();
+	}
+}
+
+
 function logout () {
 	localStorage.clear();
 	localStorage.setItem("login","0");
