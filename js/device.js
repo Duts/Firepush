@@ -33,7 +33,7 @@ if (device_req.readyState == 4 && device_req.status == 200) {
 						}else{
 							load_device.innerHTML = parse_device.devices[i].nickname;	
 						}
-						if (parse_device.devices[i].active == true ) {
+						if (parse_device.devices[i].active == true) {
 						var trash_device = document.createElement("img");
 					 	trash_device.setAttribute("src","images/trash.png");
 					 	trash_device.setAttribute("class","trash");

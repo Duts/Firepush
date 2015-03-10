@@ -32,7 +32,17 @@ if (login_request.readyState == 4 && login_request.status == 200) {
 }else if(login_request.status == 403 || login_request.status == 401 || login_request.status == 400 || login_request.status == 404){
 	alert(parse_login.error.message);
 }
-};
+
+}
+
+if(localStorage.getItem("login") != 1){
+	if (!confirm("Try again?")) {
+		alert("You're redirected to your pushbullet account, copy the token and try again");
+		window.location.replace("https://www.pushbullet.com/account");
+	}else{
+		window.location.reload();
+	}
+}
 
 
 //Load all pushs
@@ -167,19 +177,8 @@ function del(a) {
 	}
 }
 
-function del_device(b){
-	if (confirm("Would you really delete this push?")){
-		var del = new XMLHttpRequest();
-		del.open("DELETE","https://api.pushbullet.com/v2/devices/"+iden[a],false);
-		del.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
-		del.send();
-		console.log(del);
-		location.reload();
-	}
-}
-
-
 function logout () {
 	localStorage.clear();
 	localStorage.setItem("login","0");
+	location.reload();
 }

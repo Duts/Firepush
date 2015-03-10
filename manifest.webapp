@@ -16,7 +16,7 @@
 		}
 	},
 	"orientation": ["portrait","landscape"],
-	"version": "0.1",
+	"version": "0.2",
 	"icons": {
 		"16": "images/icon16.png",
 		"32": "images/icon32.png",
