@@ -1,5 +1,5 @@
 {
-	"name": "Pushbullet",
+	"name": "Firepush",
 	"description": "This is a porting for Firefox OS of Pushbullet. Actually it is an unofficial version.",
 	"launch_path": "/index.html",
 	"installs_allowed_from": ["*"],
