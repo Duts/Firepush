@@ -44,6 +44,17 @@ if(localStorage.getItem("login") != 1){
 	}
 }
 
+// WebSocket initialization
+if(localStorage.getItem("login") = 1) {
+	if (websocket != null) {
+        websocket.close();
+    }
+	websocket = new WebSocket('wss://stream.pushbullet.com/websocket/' +localStorage.getItem("token"));
+	websocket.onopen = function(e) { console.log( "WebSocket opened") }
+	websocket.onmessage = function(e) { console.log( "Get WebSocket message " + e.data) }
+    websocket.onerror = function(e) { console.log( "WebSocket error") }
+    websocket.onclose = function(e) { console.log( "WebSocket closed") }
+}
 
 //Load all pushs
 var push_request = new XMLHttpRequest();
@@ -178,6 +189,9 @@ function del(a) {
 }
 
 function logout () {
+	if (websocket != null) {
+        websocket.close();
+    }
 	localStorage.clear();
 	localStorage.setItem("login","0");
 	location.reload();
