@@ -99,3 +99,14 @@ for(var i = 0; i < bottomBtns.length; i++) {
   bottomBtns[i].addEventListener('click', bottomBarBtnClick, true);
 }
 </script>
+<script type="text/javascript">
+window.addEventListener('load', function () {
+  if (window.Notification && Notification.permission !== "granted") {
+    Notification.requestPermission(function (status) {
+      if (Notification.permission !== status) {
+        Notification.permission = status;
+      }
+    });
+  }
+});  
+</script>
