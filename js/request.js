@@ -74,10 +74,10 @@ var updatePushes = function updatePushes(last_modified) {
 				showNotification = (parse_push.pushes[i].active && !(parse_push.pushes[i].dismissed))
 				if (type == "note") {
 					if (parse_push.pushes[i].title == undefined || parse_push.pushes[i].title == null) {
-						kid.innerHTML = "<img src='images/note_image.png' class='im' />"+"<p>"+parse_push.pushes[i].body+"</p>";
+						kid.innerHTML = "<img src='images/note_image.png' class='im' /><h2>"+parse_push.pushes[i].sender_name+"</h2><p>"+parse_push.pushes[i].body+"</p>";
 						if (showNotification) {createNotification("",parse_push.pushes[i].body,il+i);}
 					}else{
-						kid.innerHTML = "<img src='images/note_image.png' class='im' /><span>&nbsp;"+parse_push.pushes[i].title+"</span><p>"+parse_push.pushes[i].body+"</p>";
+						kid.innerHTML = "<img src='images/note_image.png' class='im' /><h2>"+parse_push.pushes[i].sender_name+"</h2><h3>"+parse_push.pushes[i].title+"</h3><p>"+parse_push.pushes[i].body+"</p>";
 						if (showNotification) {createNotification(parse_push.pushes[i].title,parse_push.pushes[i].body,il+i);}
 					}
 				}else if (type == "link") {
@@ -87,10 +87,10 @@ var updatePushes = function updatePushes(last_modified) {
 						var body_link =	"<p>"+parse_push.pushes[i].body+"<br /><a href='"+parse_push.pushes[i].url+"'>"+parse_push.pushes[i].url+"</a></p>";
 					}
 					if (parse_push.pushes[i].title == undefined || parse_push.pushes[i].title == null) {
-						kid.innerHTML = "<img src='images/link_image.png' class='im' />"+body_link;
+						kid.innerHTML = "<img src='images/link_image.png' class='im' /><h2>"+parse_push.pushes[i].sender_name+"</h2>"+body_link;
 						if (showNotification) {createNotification("",body_link,il+i);}
 					}else{
-						kid.innerHTML = "<img src='images/link_image.png' class='im' /><span>&nbsp;"+parse_push.pushes[i].title+"</span>"+body_link;
+						kid.innerHTML = "<img src='images/link_image.png' class='im' /><h2>"+parse_push.pushes[i].sender_name+"</h2><h3>"+parse_push.pushes[i].title+"</h3>"+body_link;
 						if (showNotification) {createNotification(parse_push.pushes[i].title,body_link,il+i);}
 					}
 
@@ -106,14 +106,15 @@ var updatePushes = function updatePushes(last_modified) {
 				}
 
 				//Check if a push is active or not
-				if (parse_push.pushes[i].active == true) {
-					var trash = document.createElement("img");
-					trash.setAttribute("src","images/trash.png");
-					trash.setAttribute("class","trash");
-					trash.setAttribute("title",i);
-					trash.setAttribute("onclick","del("+i+")");
-					document.getElementById("push_container").appendChild(trash);
-				}
+				// Disabled until works correctly with update
+				//if (parse_push.pushes[i].active == true) {
+				//	var trash = document.createElement("img");
+				//	trash.setAttribute("src","images/trash.png");
+				//	trash.setAttribute("class","trash");
+				//	trash.setAttribute("title",i);
+				//	trash.setAttribute("onclick","del("+i+")");
+				//	document.getElementById("push_container").appendChild(trash);
+				//}
 				if (parse_push.pushes[i].modified) {
 					if (localStorage.getItem("last_modified") < parse_push.pushes[i].modified) { localStorage.setItem("last_modified",parse_push.pushes[i].modified); }
 					}
