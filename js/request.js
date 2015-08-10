@@ -4,6 +4,8 @@
 
 */
 
+
+
 if (!(localStorage.getItem("login"))) {
 
 //Access
@@ -231,22 +233,41 @@ function logout () {
     console.log('Notification created');
     }
 
+var websocket;
 
-// WebSocket initialization
-if(localStorage.getItem("login") == 1) {
-	//if (websocket != null) {
-    //    websocket.close();
-    //}
-	websocket = new WebSocket('wss://stream.pushbullet.com/websocket/' +localStorage.getItem("token"));
-	websocket.onopen = function(e) { console.log( "WebSocket opened") }
-	websocket.onmessage = function(e) {
-		console.log( "Get WebSocket message " + e.data);
-		var message = JSON.parse(e.data);
-		if (message.type  == "tickle" &&  message.subtype == "push") {
-		console.log( "Something is updated")
-		updatePushes(localStorage.getItem("last_modified"));
-        	}
+window.addEventListener('online',  changeOnlineStatus);
+window.addEventListener('offline', changeOfflineStatus);
+
+function changeOnlineStatus(){
+	console.log( "Go online");
+	if (websocket != null) { websocket.open();}	
+		else {startWebSocket();}
+}  
+
+  
+function changeOfflineStatus(){
+	console.log( "Go offline");
+	if (websocket != null) { websocket.close(); }	
+}  
+
+startWebSocket();
+
+function startWebSocket(){
+	// WebSocket initialization
+	if(localStorage.getItem("login") == 1 && navigator.onLine) {
+		console.log( "Trying to connect websocket...");
+		websocket = new ReconnectingWebSocket('wss://stream.pushbullet.com/websocket/' +localStorage.getItem("token"));
+		websocket.reconnectInterval = 5000;
+		websocket.onopen = function(e) { console.log( "WebSocket opened") }
+		websocket.onmessage = function(e) {
+			console.log( "Get WebSocket message " + e.data);	
+			var message = JSON.parse(e.data);
+			if (message.type  == "tickle" &&  message.subtype == "push") {
+			console.log( "Something is updated")
+			updatePushes(localStorage.getItem("last_modified"));
+        		}
+		}
+	    websocket.onerror = function(e) { console.log( "WebSocket error") }
+    	websocket.onclose = function(e) { console.log( "WebSocket closed"); }
 	}
-    websocket.onerror = function(e) { console.log( "WebSocket error") }
-    websocket.onclose = function(e) { console.log( "WebSocket closed") }
 }
