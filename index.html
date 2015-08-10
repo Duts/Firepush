@@ -28,12 +28,12 @@
     <p onclick="location.reload();">All</p>
   </h1>
 
-    <div id="hello" align="right"></div>
+    
 
 </header>
 <nav class="navdrawer-container">
 
-  <ul class="promote-layer"><label><b>Pushes</b></label>
+  <ul class="promote-layer"><li id="hello"></li>
     <li>
       <a onclick="show_note()">Note</a>
       <div id="notes" style="display:none;">
@@ -72,7 +72,7 @@
 
 <script type="text/javascript">
 //Show some things
-p = document.getElementById("hello").innerHTML = localStorage.getItem("name") + "<br />" + localStorage.getItem("email_user"); 
+p = document.getElementById("hello").innerHTML ='<div style="text-align: left"><img class="avatar" src="'+localStorage.getItem("avatar") + '"></div><h2>'+ localStorage.getItem("name") + "<br />" + localStorage.getItem("email_user") + '</h2>'; 
 </script>
 
 <script>

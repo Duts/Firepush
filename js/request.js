@@ -6,7 +6,7 @@
 
 
 
-if (!(localStorage.getItem("login"))) {
+if (!(localStorage.getItem("login")) || (localStorage.getItem("login") == 0)) {
 
 //Access
 var token = prompt("Type the your token for login");

@@ -471,3 +471,17 @@ background-color: rgba(0, 0, 0, 0.39);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
       }
+      .promote-layer h2 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 1rem;
+        font-size: 1em;
+        text-align: left;
+      }
+.avatar {
+ margin: 1rem;
+ margin-bottom: 0.5rem;
+ height: 3rem;
+ width: 3rem;
+ border-radius: 50%;
+}
