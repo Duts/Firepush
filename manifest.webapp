@@ -13,6 +13,10 @@
 		"it": {
 			"name": "Pushbullet",
 			"description": "Port di Pushbullet per Firefox OS. Attualmente non è una versione ufficiale."
+		},
+		"ru": {
+			"name": "Pushbullet",
+			"description": "Это неофициальное приложение Pushbullet для Firefox OS."
 		}
 	},
 	"orientation": ["portrait","landscape"],
