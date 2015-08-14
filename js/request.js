@@ -46,64 +46,46 @@ if(localStorage.getItem("login") != 1){
 	}
 }
 
-//Contain all iden
-var iden = [];
-
-var updatePushes = function updatePushes(last_modified) {
-	var push_request = new XMLHttpRequest();
-	push_request.open("GET","https://api.pushbullet.com/v2/pushes?modified_after="+ last_modified,true);
-	push_request.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
-	push_request.send();
-	console.log(push_request);
-	
-	il = iden.length
-
-	push_request.onreadystatechange=function()
-	{
-		if (push_request.readyState == 4 && push_request.status == 200) {
-			var parse_push = JSON.parse(push_request.responseText);
-			console.log(push_request);
-			var FirstPush = document.getElementById("push_container").firstChild
-			for (var i = 0; i < parse_push.pushes.length; i++) {
-				var newPush = false;
-				if (document.getElementById(parse_push.pushes[i].iden)) { var kid = document.getElementById(parse_push.pushes[i].iden) }
-					else { var kid = document.createElement("div"); kid.id = parse_push.pushes[i].iden;  newPush = true}
-				kid.setAttribute("class","push_container_style");
-				var type = parse_push.pushes[i].type;
-				iden[il+i] = parse_push.pushes[i].iden;
-				showNotification = (parse_push.pushes[i].active && !(parse_push.pushes[i].dismissed))
-				if (type == "note") {
-					if (parse_push.pushes[i].title == undefined || parse_push.pushes[i].title == null) {
-						kid.innerHTML = "<img src='images/note_image.png' class='im' /><h2>"+parse_push.pushes[i].sender_name+"</h2><p>"+parse_push.pushes[i].body+"</p>";
-						if (showNotification) {createNotification("",parse_push.pushes[i].body,il+i);}
-					}else{
-						kid.innerHTML = "<img src='images/note_image.png' class='im' /><h2>"+parse_push.pushes[i].sender_name+"</h2><h3>"+parse_push.pushes[i].title+"</h3><p>"+parse_push.pushes[i].body+"</p>";
-						if (showNotification) {createNotification(parse_push.pushes[i].title,parse_push.pushes[i].body,il+i);}
+function updatePushView(push){
+	if (document.getElementById(push.iden)) { var kid = document.getElementById(push.iden); var newPush = false;}
+		else { var kid = document.createElement("div"); kid.id = push.iden;  var newPush = true;}
+	kid.setAttribute("class","push_container_style");
+	var type = push.type;
+	switch (type) {
+		case "note": {
+				if (push.title == undefined || push.title == null) {
+					kid.innerHTML = "<img src='images/note_image.png' class='im' /><h2>"+push.sender_name+"</h2><p>"+push.body+"</p>";
+				}else{
+					kid.innerHTML = "<img src='images/note_image.png' class='im' /><h2>"+push.sender_name+"</h2><h3>"+push.title+"</h3><p>"+push.body+"</p>";
 					}
-				}else if (type == "link") {
-					if (parse_push.pushes[i].body == undefined || parse_push.pushes[i].body == null) {
-						var body_link =	"<p><a href='"+parse_push.pushes[i].url+"'>"+parse_push.pushes[i].url+"</a></p>";
-					}else{
-						var body_link =	"<p>"+parse_push.pushes[i].body+"<br /><a href='"+parse_push.pushes[i].url+"'>"+parse_push.pushes[i].url+"</a></p>";
-					}
-					if (parse_push.pushes[i].title == undefined || parse_push.pushes[i].title == null) {
-						kid.innerHTML = "<img src='images/link_image.png' class='im' /><h2>"+parse_push.pushes[i].sender_name+"</h2>"+body_link;
-						if (showNotification) {createNotification("",body_link,il+i);}
-					}else{
-						kid.innerHTML = "<img src='images/link_image.png' class='im' /><h2>"+parse_push.pushes[i].sender_name+"</h2><h3>"+parse_push.pushes[i].title+"</h3>"+body_link;
-						if (showNotification) {createNotification(parse_push.pushes[i].title,body_link,il+i);}
-					}
-
-				}else if (type == "address"){
-					kid.innerHTML = "<img src='images/address_image.png' class='im' /><span>&nbsp; Address: "+ parse_push.pushes[i].name +"</span>";
-
-				}else if (type == "file") {
-					if (parse_push.pushes[i].file_type == "image/png" || parse_push.pushes[i].file_type == "image/jpg" || parse_push.pushes[i].file_type == "image/jpeg" || parse_push.pushes[i].file_type == "image/gif" || parse_push.pushes[i].file_type == "image/bpm") {
-						kid.innerHTML = "<img src='" + localStorage.getItem("avatar") + "' class='im' /><p><a href='" + parse_push.pushes[i].file_url + "' ><img src='" + parse_push.pushes[i].file_url + "' class='im_push'></a></p>";
-					}else{
-						kid.innerHTML = "<img src='" + localStorage.getItem("avatar") + "' class='im' /><p><a href='" + parse_push.pushes[i].file_url + "' >" + parse_push.pushes[i].file_name + "</a></p>";
-					}
+				break
 				}
+		case "link": {
+				if (push.body == undefined || push.body == null) {
+					var body_link =	"<p><a href='"+push.url+"'>"+push.url+"</a></p>";
+				}else{
+					var body_link =	"<p>"+push.body+"<br /><a href='"+push.url+"'>"+push.url+"</a></p>";
+				}
+				if (push.title == undefined || push.title == null) {
+					kid.innerHTML = "<img src='images/link_image.png' class='im' /><h2>"+push.sender_name+"</h2>"+body_link;
+				}else{
+					kid.innerHTML = "<img src='images/link_image.png' class='im' /><h2>"+push.sender_name+"</h2><h3>"+push.title+"</h3>"+body_link;
+				}
+				break
+				}
+		case "address":{
+				kid.innerHTML = "<img src='images/address_image.png' class='im' /><span>&nbsp; Address: "+ push.name +"</span>";
+				break
+				}
+		case "file": {
+				if (push.file_type == "image/png" || push.file_type == "image/jpg" || push.file_type == "image/jpeg" || push.file_type == "image/gif" || push.file_type == "image/bpm") {
+					kid.innerHTML = "<img src='" + localStorage.getItem("avatar") + "' class='im' /><p><a href='" + push.file_url + "' ><img src='" + push.file_url + "' class='im_push'></a></p>";
+				}else{
+					kid.innerHTML = "<img src='" + localStorage.getItem("avatar") + "' class='im' /><p><a href='" + push.file_url + "' >" + push.file_name + "</a></p>";
+				}
+			break
+			}
+	} //switch		
 
 				//Check if a push is active or not
 				// Disabled until works correctly with update
@@ -115,12 +97,48 @@ var updatePushes = function updatePushes(last_modified) {
 				//	trash.setAttribute("onclick","del("+i+")");
 				//	document.getElementById("push_container").appendChild(trash);
 				//}
+	if (newPush) {
+		getPrevPush(push.created,function(e){
+			if (e) {
+				var PrevPush = document.getElementById(e.iden);
+				document.getElementById("push_container").insertBefore(kid, PrevPush);
+					}
+				else {document.getElementById("push_container").appendChild(kid)};
+		});
+	}
+}
+
+
+
+var updatePushes = function updatePushes(last_modified, f) {
+	if (last_modified == undefined) {last_modified = 0}
+	var push_request = new XMLHttpRequest();
+	var request_string = "https://api.pushbullet.com/v2/pushes?modified_after="+ last_modified;
+	if (last_modified == 0) {request_string += "&limit=25";
+		if (localStorage.getItem("server_cursor")) {request_string +="&cursor=" + localStorage.getItem("server_cursor")};
+							};
+	push_request.open("GET",request_string,true);
+	push_request.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
+	push_request.send();
+	console.log(push_request);
+	push_request.onreadystatechange=function()
+	{
+		if (push_request.readyState == 4 && push_request.status == 200) {
+			var parse_push = JSON.parse(push_request.responseText);
+			console.log(push_request);
+				if (last_modified == 0) {
+					if (parse_push.cursor) { localStorage.setItem("server_cursor",parse_push.cursor)}
+						else {localStorage.removeItem("server_cursor")}
+										};
+			for (var i = 0; i < parse_push.pushes.length; i++) {
+				setPush(parse_push.pushes[i])
+				updatePushView(parse_push.pushes[i])
 				if (parse_push.pushes[i].modified) {
 					if (localStorage.getItem("last_modified") < parse_push.pushes[i].modified) { localStorage.setItem("last_modified",parse_push.pushes[i].modified); }
 					}
 
-				if (newPush) {document.getElementById("push_container").insertBefore(kid, FirstPush);}
-			}
+				}
+			getNotDismissedPushes(showNotification);
 		}else if(push_request.status == 400 || push_request.status == 401 || push_request.status == 403 || push_request.status == 404){
 			alert(parse_push.error.message);
 		}
@@ -128,7 +146,45 @@ var updatePushes = function updatePushes(last_modified) {
 
 }
 
-updatePushes(0)
+updatePushes(localStorage.getItem("last_modified"));
+
+
+function loadPushes(){
+	ListPushes(localStorage.getItem("last_modified"), 25, function (e){
+		updatePushView(e);
+	});
+}
+
+loadPushes();
+
+
+function scroller(evt){
+	var wrap = document.getElementById("push_container");
+	var contentHeight = wrap.offsetHeight;
+	var yOffset = window.pageYOffset; 
+	var y = yOffset + window.innerHeight;
+	if(y >= contentHeight) {
+		var lastPush = document.getElementById("push_container").lastChild;
+			getPush(lastPush.id,function(e){
+				getFirstCreatedPush(function(fe){
+					if (fe.created < e.created) {
+						console.log("List more 25 pushes from DB");
+						ListPushes(e.created, 25, function (e){
+							updatePushView(e);
+						});}
+						else {
+							console.log("Pushes run out in DB ...");
+							if (localStorage.getItem("server_cursor")) {
+								console.log("Ask for load more pushes...");
+								updatePushes(0);
+								console.log("Pushes loaded from server.");
+								}
+							else {console.log("and run out on server.");}
+						}
+				});
+			});
+		}
+}
 
 
 //Set value for hide/show menu
@@ -194,14 +250,21 @@ function del(a) {
 }
 
 function dismiss(a) {
-	console.log("Dismissing "+ a + " iden:"+iden[a] );
+	console.log("Dismissing "+ a );
 	var dis = new XMLHttpRequest();
-	dis.open("POST","https://api.pushbullet.com/v2/pushes/"+iden[a],false);
+	dis.open("POST","https://api.pushbullet.com/v2/pushes/"+a,false);
 	dis.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
 	dis.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	var blob = '{"dismissed": true}';
 	dis.send(blob);
 	console.log(dis);
+}
+
+function dismissAll(pnn){
+	console.log("Dismissing all pushes");
+	for (var i = 0; i < pnn.length; i++) {
+		dismiss(pnn[i]);
+	}
 }
 
 
@@ -215,24 +278,60 @@ function logout () {
 	location.reload();
 }
 
-// Creates a notification using our app icon and adding some actions
-  var createNotification = function createNotification(title,body,pos) {
-	var options = {
-      		body: body,
-      		icon: "images/icon64.png"
-  			}
-	console.log('Creating notification');
-    var n = new Notification(title,options)
-	// Handle notification clicks
-	n.pos = pos
-    n.onclick = function () {
+var notification;
+
+function showNotification(pnn){
+	function notiClick(){
 		console.log('Notification clicked');
 		navigator.mozApps.getSelf().onsuccess = function(e) { e.target.result.launch();	}
-		dismiss(this.pos);
-        this.close();
-	    }
-    console.log('Notification created');
-    }
+		dismissAll(pnn);
+        this.close();	
+		}	
+
+	if (notification && (pnn.length == 0)) {
+		console.log('Closing notification');
+		notification.close();
+		return
+	}
+	if (pnn.length == 1) {
+		console.log('Creating one notification');
+		getPush(pnn[0],function(e){
+		console.log('Notification '+ e);
+		var title = e.title;
+		var options = {
+			tag: "Pushbullet",
+    		body: e.body,
+    		icon: "images/icon64.png"
+  			}
+		notification = new Notification(title,options);
+		notification.onclick = notiClick;
+		}
+		);
+		console.log('Notification created');
+		return
+	}
+	if (pnn.length > 1) {
+		console.log('Creating multiple notification');
+		var title = pnn.length+" new messages"
+		var options = {
+			tag: "Pushbullet",
+    		body: "",
+    		icon: "images/icon64.png"
+  			}
+		
+		function addTitle(e){
+			options.body +=  e.title + "\n";
+			notification = new Notification(title,options);
+			
+		}
+		for (var i = 0; i < pnn.length; i++) {
+			getPush(pnn[i],addTitle);	
+		}
+		console.log('Notification created');
+		return
+	}	
+	
+}
 
 var websocket;
 
