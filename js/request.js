@@ -287,6 +287,7 @@ function logout () {
 	if (websocket != null) {
         websocket.close();
     }
+	clearDatabase();
 	localStorage.clear();
 	localStorage.setItem("login","0");
 	location.reload();

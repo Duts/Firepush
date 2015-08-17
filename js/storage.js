@@ -21,6 +21,10 @@ function connectDB(f){
     }
 }
 
+function clearDatabase(){
+    indexedDB.deleteDatabase(baseName);
+}
+
 function getPush(iden, f){
     connectDB(function(db){
         var request = db.transaction([storeName], "readonly").objectStore(storeName).get(iden);
