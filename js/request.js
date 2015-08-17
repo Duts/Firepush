@@ -4,7 +4,7 @@
 
 */
 
-
+var pushesIsUpdating = false;
 
 if (!(localStorage.getItem("login")) || (localStorage.getItem("login") == 0)) {
 
@@ -46,9 +46,14 @@ if(localStorage.getItem("login") != 1){
 	}
 }
 
-function updatePushView(push){
+function updatePushView(push,prevPush){
+	if (!push.active) {
+		if (document.getElementById(push.iden)) { document.getElementById(push.iden).remove(); return}
+			else {return}
+		}
 	if (document.getElementById(push.iden)) { var kid = document.getElementById(push.iden); var newPush = false;}
 		else { var kid = document.createElement("div"); kid.id = push.iden;  var newPush = true;}
+
 	kid.setAttribute("class","push_container_style");
 	var type = push.type;
 	switch (type) {
@@ -87,30 +92,36 @@ function updatePushView(push){
 			}
 	} //switch		
 
-				//Check if a push is active or not
-				// Disabled until works correctly with update
-				//if (parse_push.pushes[i].active == true) {
-				//	var trash = document.createElement("img");
-				//	trash.setAttribute("src","images/trash.png");
-				//	trash.setAttribute("class","trash");
-				//	trash.setAttribute("title",i);
-				//	trash.setAttribute("onclick","del("+i+")");
-				//	document.getElementById("push_container").appendChild(trash);
-				//}
+
+	var trash = document.createElement("img");
+	trash.setAttribute("src","images/trash.png");
+	trash.setAttribute("class","trash");
+	trash.addEventListener("click", deletePush, false);
+	kid.appendChild(trash);
+	
+	
 	if (newPush) {
-		getPrevPush(push.created,function(e){
-			if (e) {
-				var PrevPush = document.getElementById(e.iden);
-				document.getElementById("push_container").insertBefore(kid, PrevPush);
+			if (prevPush) {
+				var PrevPushElem = document.getElementById(prevPush.iden);
+				document.getElementById("push_container").insertBefore(kid, PrevPushElem);
 					}
 				else {document.getElementById("push_container").appendChild(kid)};
-		});
-	}
+		}
+	
 }
 
-
+function deletePush(e){
+	if (confirm("Would you really delete this push?")){
+		var iden = this.parentNode.id;
+		console.log("Deleting push: " + iden);
+		del(iden);
+//		delPush(iden);
+//		this.parentNode.remove();
+		}
+}
 
 var updatePushes = function updatePushes(last_modified, f) {
+	pushesIsUpdating = true;
 	if (last_modified == undefined) {last_modified = 0}
 	var push_request = new XMLHttpRequest();
 	var request_string = "https://api.pushbullet.com/v2/pushes?modified_after="+ last_modified;
@@ -126,22 +137,24 @@ var updatePushes = function updatePushes(last_modified, f) {
 		if (push_request.readyState == 4 && push_request.status == 200) {
 			var parse_push = JSON.parse(push_request.responseText);
 			console.log(push_request);
-				if (last_modified == 0) {
+			if (last_modified == 0) {
 					if (parse_push.cursor) { localStorage.setItem("server_cursor",parse_push.cursor)}
 						else {localStorage.removeItem("server_cursor")}
-										};
-			for (var i = 0; i < parse_push.pushes.length; i++) {
-				setPush(parse_push.pushes[i])
-				updatePushView(parse_push.pushes[i])
-				if (parse_push.pushes[i].modified) {
-					if (localStorage.getItem("last_modified") < parse_push.pushes[i].modified) { localStorage.setItem("last_modified",parse_push.pushes[i].modified); }
+									};
+			sequentialSetPushes(parse_push.pushes, updatePushView, function(){
+				for (var i = 0; i < parse_push.pushes.length; i++) {
+					//setPush(parse_push.pushes[i], updatePushView);
+					//updatePushView(parse_push.pushes[i])
+					if (parse_push.pushes[i].modified) {
+						if (localStorage.getItem("last_modified") < parse_push.pushes[i].modified) { localStorage.setItem("last_modified",parse_push.pushes[i].modified); }
+						}
 					}
-
-				}
-			getNotDismissedPushes(showNotification);
+				getNotDismissedPushes(showNotification);
+			});
 		}else if(push_request.status == 400 || push_request.status == 401 || push_request.status == 403 || push_request.status == 404){
 			alert(parse_push.error.message);
 		}
+		pushesIsUpdating = false;
 	}
 
 }
@@ -168,17 +181,21 @@ function scroller(evt){
 			getPush(lastPush.id,function(e){
 				getFirstCreatedPush(function(fe){
 					if (fe.created < e.created) {
+						if (!pushesIsUpdating) {
 						console.log("List more 25 pushes from DB");
 						ListPushes(e.created, 25, function (e){
 							updatePushView(e);
 						});}
+					}
 						else {
 							console.log("Pushes run out in DB ...");
 							if (localStorage.getItem("server_cursor")) {
+								if (!pushesIsUpdating) {
 								console.log("Ask for load more pushes...");
 								updatePushes(0);
 								console.log("Pushes loaded from server.");
 								}
+							}
 							else {console.log("and run out on server.");}
 						}
 				});
@@ -238,15 +255,12 @@ function link(){
 	location.reload();
 }
 
-function del(a) {
-	if (confirm("Would you really delete this push?")){
-		var del = new XMLHttpRequest();
-		del.open("DELETE","https://api.pushbullet.com/v2/pushes/"+iden[a],false);
-		del.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
-		del.send();
-		console.log(del);
-		location.reload();
-	}
+function del(iden) {
+	var del = new XMLHttpRequest();
+	del.open("DELETE","https://api.pushbullet.com/v2/pushes/"+iden,false);
+	del.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
+	del.send();
+	console.log(del);
 }
 
 function dismiss(a) {

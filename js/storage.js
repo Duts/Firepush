@@ -31,13 +31,23 @@ function getPush(iden, f){
     });
 }
 
-function setPush(push){
+function setPush(push,f){
     connectDB(function(db){
         var request = db.transaction([storeName], "readwrite").objectStore(storeName).put(push);
         request.onerror = logerr;
         request.onsuccess = function(){
-            //updateView here
+            f(push);
             return request.result;
+        }
+    });
+}
+
+function delPush(iden){
+    connectDB(function(db){
+        var request = db.transaction([storeName], "readwrite").objectStore(storeName).delete(iden);
+        request.onerror = logerr;
+        request.onsuccess = function(){
+            console.log("Push deleted from DB:", iden);
         }
     });
 }
@@ -91,7 +101,10 @@ function getFirstCreatedPush(f){
         request.onerror = logerr;
         request.onsuccess = function(e) {
            var cursor = e.target.result;
-           if (cursor) { f(cursor.value); }
+           if (cursor) {
+               if (cursor.value.active) {f(cursor.value);}
+                  else {cursor.continue()}
+                }
            };
     });    
 }
@@ -107,4 +120,29 @@ function getPrevPush(CTime,f){
                else {f(null);}
            };
     });
+}
+
+
+function sequentialSetPushes(pushes,eachF,completeF){
+        connectDB(function(db){
+        var request = db.transaction([storeName], "readwrite").objectStore(storeName);
+        var i = 0;
+        putNext();
+        function putNext(e){
+            if (i > 0) { eachF(pushes[i-1],e.target.result ? e.target.result.value : null ) }
+            if (i<pushes.length) {
+               request.put(pushes[i]).onsuccess = prevNext;
+               ++i;
+               } else {   // complete
+                   console.log('Sequential set complete');
+                   completeF();
+               }
+            }
+        
+            
+        function prevNext(e){
+            request.index('created').openCursor(IDBKeyRange.upperBound(pushes[i-1].created,true),'prev').onsuccess = putNext;
+           }
+        
+   });
 }

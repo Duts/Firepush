@@ -18,8 +18,12 @@ html, body {
       }
 
 .trash{
-  float: right;
+  position: absolute;
+  top: 0%;
+  right: 0%;
 }
+
+
 #setting_box{
   margin: 10%;
   height: 100px;
@@ -55,6 +59,7 @@ html, body {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   background-color: #fefefe;
+  position: relative;
 }
 .push_container_style h2 {
 font-size: 1.1em;
@@ -71,6 +76,7 @@ margin-left: 5rem;
 margin-right: 1.5rem;
 margin-bottom: 0;
 }
+
 
       .app-bar {
         display: -ms-flexbox;
