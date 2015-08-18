@@ -62,6 +62,57 @@ function updatePushView(push,prevPush){
 	
 }
 
+function updateDeviceView(device){
+	if (!device.active) {
+		if (document.getElementById(device.iden)) { document.getElementById(device.iden).remove(); return}
+			else {return}
+		}
+	if (document.getElementById(device.iden)) { var dev = document.getElementById(device.iden); var newDevice = false;}
+		else { var dev = document.createElement("div"); dev.id = device.iden;  var newDevice = true;}
+	dev.setAttribute("class","device_container_style");
+	var type = device.type;
+	switch (type) {
+		case "windows":{
+			dev.innerHTML = "<img src='images/pc.png' class='dev_img' /><h3>"+device.nickname+"</h3>";
+			break;
+					   }
+		case "android":{
+			dev.innerHTML = "<img src='images/phone.png' class='dev_img' /><h3>"+device.nickname+"</h3>";
+			break;
+					   }
+		case "IE":
+		case "chrome":
+		case "safari":
+		case "firefox":{
+			dev.innerHTML = "<img src='images/browser.png' class='dev_img' /><h3>"+device.nickname+"</h3>";
+			break;
+					   }
+		default: 	   {
+			dev.innerHTML = "<h3>"+device.nickname+"</h3>";
+			break;
+					   }
+	} //switch
+	var trash_device = document.createElement("img");
+	trash_device.setAttribute("src","images/trash.png");
+	trash_device.setAttribute("class","trash");
+	trash_device.addEventListener("click", deleteDevice, false);
+	dev.appendChild(trash_device);
+	if (newDevice) {
+		document.getElementById("devices_container").appendChild(dev);
+		}
+	
+}
+
+function show_devices(){
+	if (localStorage.getItem("a") == 0){
+	document.getElementById('devices_container').style = "display: block;";
+	localStorage.setItem("a","1");
+	}else{
+		document.getElementById('devices_container').style = "display: none;"
+		localStorage.setItem("a","0");
+	}
+}
+
 function show_note(){
 	if (localStorage.getItem("a") == 0){
 	document.getElementById('notes').style = "display: block;";
@@ -80,4 +131,20 @@ function show_link(){
 		document.getElementById('links').style = "display: none;"
 		localStorage.setItem("a","0");
 	}
+}
+
+function deletePush(e){
+	if (confirm("Would you really delete this push?")){
+		var iden = this.parentNode.id;
+		console.log("Deleting push: " + iden);
+		deletePushRQ(iden);
+		}
+}
+
+function deleteDevice(e){
+	if (confirm("Would you really delete this device?")){
+		var iden = this.parentNode.id;
+		console.log("Deleting device: " + iden);
+		deleteDeviceRQ(iden);
+		}
 }

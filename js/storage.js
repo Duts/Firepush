@@ -1,8 +1,9 @@
 var indexedDB 	  = window.indexedDB
     IDBTransaction  = window.IDBTransaction
 const    baseName 	  = "pushbulletBase";
-const    baseVersion   = 2;
+const    baseVersion   = 3;
 const    storeName 	  = "pushStore";
+const    deviceStoreName   = "deviceStore";
 
 function logerr(err){
     console.log(err);
@@ -18,6 +19,8 @@ function connectDB(f){
         if (baseVersion < 2 ) {var store = e.currentTarget.transaction.objectStore(storeName);}
            else {var store = e.currentTarget.result.createObjectStore(storeName, { keyPath: "iden" });}
         store.createIndex("created", "created", { unique: false });
+        var deviceStore = e.currentTarget.result.createObjectStore(deviceStoreName, { keyPath: "iden" });
+        deviceStore.createIndex("created", "created", { unique: false });
     }
 }
 
@@ -94,7 +97,7 @@ function listPushesDB(newestCTime,maxCount,f){
                if (count < maxCount) {cursor.continue();}
            }
            else {
-               console.log("Listed "+count+", no more entries");
+               console.log("Listed "+count+" pushes, no more entries");
            };
        }
     })    
@@ -151,4 +154,46 @@ function sequentialSetPushesDB(pushes,eachF,completeF){
            }
         
    });
+}
+
+function getDeviceDB(iden, f){
+    connectDB(function(db){
+        var request = db.transaction([deviceStoreName], "readonly").objectStore(deviceStoreName).get(iden);
+        request.onerror = logerr;
+        request.onsuccess = function(){
+            f(request.result ? request.result : -1);
+        }
+    });
+}
+
+
+function setDeviceDB(device,f){
+    connectDB(function(db){
+        var request = db.transaction([deviceStoreName], "readwrite").objectStore(deviceStoreName).put(device);
+        request.onerror = logerr;
+        request.onsuccess = function(){
+            f(device);
+            return request.result;
+        }
+    });
+}
+
+function listDevicesDB(f){
+    connectDB(function(db){
+       var store = db.transaction([deviceStoreName], "readonly").objectStore(deviceStoreName);
+       var request = store.index('created').openCursor();
+       var count = 0; 
+       request.onerror = logerr;
+       request.onsuccess = function(e) {
+           var cursor = e.target.result;
+           if (cursor) {
+               count++;
+               f(cursor.value);
+               cursor.continue();
+           }
+           else {
+               console.log("Listed "+count+" devices, no more entries");
+           };
+       }
+    })    
 }

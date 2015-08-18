@@ -14,9 +14,11 @@ if(localStorage.getItem("login") != 1){
 	}
 }
 
-listPushesDB(localStorage.getItem("last_modified"), 25, function (e){ updatePushView(e); });
+updatePushesRQ(localStorage.getItem("last_modified"));
+updateDevicesRQ();
 
-updatePushes(localStorage.getItem("last_modified"));
+listPushesDB(localStorage.getItem("last_modified"), 25, updatePushView);
+listDevicesDB(updateDeviceView);
 
 window.addEventListener('scroll', scroller, false ); 
 
@@ -41,7 +43,7 @@ function scroller(evt){
 							if (localStorage.getItem("server_cursor")) {
 								if (!pushesIsUpdating) {
 								console.log("Ask for load more pushes...");
-								updatePushes(0);
+								updatePushesRQ(0);
 								console.log("Pushes loaded from server.");
 								}
 							}

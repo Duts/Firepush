@@ -28,15 +28,8 @@ function loginRQ(){
 			alert(parse_login.error.message);}	
 }
 
-function deletePush(e){
-	if (confirm("Would you really delete this push?")){
-		var iden = this.parentNode.id;
-		console.log("Deleting push: " + iden);
-		deletePushRQ(iden);
-		}
-}
 
-var updatePushes = function updatePushes(last_modified, f) {
+function updatePushesRQ(last_modified, f) {
 	pushesIsUpdating = true;
 	if (last_modified == undefined) {last_modified = 0}
 	var push_request = new XMLHttpRequest();
@@ -112,7 +105,7 @@ function deletePushRQ(iden) {
 }
 
 function dismissRQ(iden) {
-	console.log("Dismissing "+ a );
+	console.log("Dismissing "+ iden );
 	var dis = new XMLHttpRequest();
 	dis.open("POST","https://api.pushbullet.com/v2/pushes/"+iden,false);
 	dis.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
@@ -129,6 +122,30 @@ function dismissAll(pnn){
 	}
 }
 
+function updateDevicesRQ(){
+	var device_req = new XMLHttpRequest();
+	device_req.open("GET","https://api.pushbullet.com/v2/devices",true);
+	device_req.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
+	device_req.send();
+	console.log(device_req);
+	device_req.onload=function(){
+		if (device_req.readyState == 4 && device_req.status == 200) {
+			var parse_device = JSON.parse(device_req.responseText);
+			for (var i = 0; i < parse_device.devices.length; i++) {
+				setDeviceDB(parse_device.devices[i],updateDeviceView);
+				}
+		}
+	}
+}
+
+function deleteDeviceRQ(iden){
+	var del_dev = new XMLHttpRequest();
+	del_dev.open("DELETE","https://api.pushbullet.com/v2/devices/"+iden,false);
+	del_dev.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
+	del_dev.send();
+	console.log(del_dev);
+}
+
 var websocket;
 
 function startWebSocket(){
@@ -142,9 +159,14 @@ function startWebSocket(){
 			console.log( "Get WebSocket message " + e.data);	
 			var message = JSON.parse(e.data);
 			if (message.type  == "tickle" &&  message.subtype == "push") {
-			console.log( "Something is updated")
-			updatePushes(localStorage.getItem("last_modified"));
+			console.log( "There is pushes update on server");
+			updatePushesRQ(localStorage.getItem("last_modified"));
         		}
+			if (message.type  == "tickle" &&  message.subtype == "device") {
+			console.log( "There is devices update on server");
+			updateDevicesRQ();
+        		}
+			
 		}
 	    websocket.onerror = function(e) { console.log( "WebSocket error") }
     	websocket.onclose = function(e) { console.log( "WebSocket closed"); }
