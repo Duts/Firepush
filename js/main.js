@@ -14,10 +14,11 @@ if(localStorage.getItem("login") != 1){
 	}
 }
 
-
 listPushesDB(localStorage.getItem("last_modified"), 25, function (e){ updatePushView(e); });
 
 updatePushes(localStorage.getItem("last_modified"));
+
+window.addEventListener('scroll', scroller, false ); 
 
 function scroller(evt){
 	var wrap = document.getElementById("push_container");
@@ -51,6 +52,15 @@ function scroller(evt){
 		}
 }
 
+window.addEventListener('load', function () {
+  if (window.Notification && Notification.permission !== "granted") {
+    Notification.requestPermission(function (status) {
+      if (Notification.permission !== status) {
+        Notification.permission = status;
+      }
+    });
+  }
+}); 
 
 //Set value for hide/show menu
 localStorage.setItem("a","0");

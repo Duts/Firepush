@@ -72,17 +72,15 @@
 <br />
 
 <div id="push_container"></div>
-
-
+  
 <script type="text/javascript">
 //Show some things
 p = document.getElementById("hello").innerHTML ='<div style="text-align: left"><img class="avatar" src="'+localStorage.getItem("avatar") + '"></div><h2>'+ localStorage.getItem("name") + "<br />" + localStorage.getItem("email_user") + '</h2>'; 
 </script>
-
+  
 <script>
 var navdrawerContainer = document.querySelector('.navdrawer-container');
 var appbarElement = document.querySelector('.app-bar');
-
 var menuBtn = document.querySelector('.menu');
 menuBtn.addEventListener('click', function() {
 var isOpen = navdrawerContainer.classList.contains('open');
@@ -99,24 +97,11 @@ var isOpen = navdrawerContainer.classList.contains('open');
 var menuBtn = document.querySelector('.menu');
 menuBtn.addEventListener('click', function() {
 }, true);
-
 var bottomBtns = document.querySelectorAll('.bottom-bar > button');
 for(var i = 0; i < bottomBtns.length; i++) {
   bottomBtns[i].addEventListener('click', bottomBarBtnClick, true);
 }
-</script>
-<script type="text/javascript">
-window.addEventListener('load', function () {
-  if (window.Notification && Notification.permission !== "granted") {
-    Notification.requestPermission(function (status) {
-      if (Notification.permission !== status) {
-        Notification.permission = status;
-      }
-    });
-  }
-});  
-</script>
-<script type="text/javascript">
-window.addEventListener('scroll', scroller, false );  
 </script>  
+
+</body> 
   
