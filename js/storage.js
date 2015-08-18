@@ -21,11 +21,11 @@ function connectDB(f){
     }
 }
 
-function clearDatabase(){
+function clearDB(){
     indexedDB.deleteDatabase(baseName);
 }
 
-function getPush(iden, f){
+function getPushDB(iden, f){
     connectDB(function(db){
         var request = db.transaction([storeName], "readonly").objectStore(storeName).get(iden);
         request.onerror = logerr;
@@ -35,7 +35,8 @@ function getPush(iden, f){
     });
 }
 
-function setPush(push,f){
+
+function setPushDB(push,f){
     connectDB(function(db){
         var request = db.transaction([storeName], "readwrite").objectStore(storeName).put(push);
         request.onerror = logerr;
@@ -46,7 +47,7 @@ function setPush(push,f){
     });
 }
 
-function delPush(iden){
+function delPushDB(iden){
     connectDB(function(db){
         var request = db.transaction([storeName], "readwrite").objectStore(storeName).delete(iden);
         request.onerror = logerr;
@@ -56,8 +57,9 @@ function delPush(iden){
     });
 }
 
-function getNotDismissedPushes(f){
+function getNotDismissedPushesDB(f){
     connectDB(function(db){
+       console.log("Looking for not dismissed pushes...");
        var notDissmissedIdens = [];
        var store = db.transaction([storeName], "readonly").objectStore(storeName);
        var request = store.openCursor()
@@ -69,14 +71,14 @@ function getNotDismissedPushes(f){
                cursor.continue();
            }
            else {
-               console.log("No more entries");
+               console.log("Get "+notDissmissedIdens.length+"not dismissed.");
                f(notDissmissedIdens);
            };
        }
     });
 }
 
-function ListPushes(newestCTime,maxCount,f){
+function listPushesDB(newestCTime,maxCount,f){
     connectDB(function(db){
        var notDissmissedIdens = [];
        var store = db.transaction([storeName], "readonly").objectStore(storeName);
@@ -98,7 +100,7 @@ function ListPushes(newestCTime,maxCount,f){
     })    
 }
 
-function getFirstCreatedPush(f){
+function getFirstCreatedPushDB(f){
     connectDB(function(db){
         var store = db.transaction([storeName], "readonly").objectStore(storeName);
         var request = store.index('created').openCursor(null,'next');
@@ -113,7 +115,7 @@ function getFirstCreatedPush(f){
     });    
 }
 
-function getPrevPush(CTime,f){
+function getPrevPushDB(CTime,f){
     connectDB(function(db){
         var store = db.transaction([storeName], "readonly").objectStore(storeName);
         var request = store.index('created').openCursor(IDBKeyRange.upperBound(CTime,true),'prev');
@@ -127,7 +129,7 @@ function getPrevPush(CTime,f){
 }
 
 
-function sequentialSetPushes(pushes,eachF,completeF){
+function sequentialSetPushesDB(pushes,eachF,completeF){
         connectDB(function(db){
         var request = db.transaction([storeName], "readwrite").objectStore(storeName);
         var i = 0;

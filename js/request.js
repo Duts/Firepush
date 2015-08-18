@@ -115,7 +115,7 @@ function deletePush(e){
 		var iden = this.parentNode.id;
 		console.log("Deleting push: " + iden);
 		del(iden);
-//		delPush(iden);
+//		delPushDB(iden);
 //		this.parentNode.remove();
 		}
 }
@@ -141,15 +141,15 @@ var updatePushes = function updatePushes(last_modified, f) {
 					if (parse_push.cursor) { localStorage.setItem("server_cursor",parse_push.cursor)}
 						else {localStorage.removeItem("server_cursor")}
 									};
-			sequentialSetPushes(parse_push.pushes, updatePushView, function(){
+			sequentialSetPushesDB(parse_push.pushes, updatePushView, function(){
 				for (var i = 0; i < parse_push.pushes.length; i++) {
-					//setPush(parse_push.pushes[i], updatePushView);
+					//setPushDB(parse_push.pushes[i], updatePushView);
 					//updatePushView(parse_push.pushes[i])
 					if (parse_push.pushes[i].modified) {
 						if (localStorage.getItem("last_modified") < parse_push.pushes[i].modified) { localStorage.setItem("last_modified",parse_push.pushes[i].modified); }
 						}
 					}
-				getNotDismissedPushes(showNotification);
+				getNotDismissedPushesDB(showNotification);
 			});
 		}else if(push_request.status == 400 || push_request.status == 401 || push_request.status == 403 || push_request.status == 404){
 			alert(parse_push.error.message);
@@ -163,7 +163,7 @@ updatePushes(localStorage.getItem("last_modified"));
 
 
 function loadPushes(){
-	ListPushes(localStorage.getItem("last_modified"), 25, function (e){
+	listPushesDB(localStorage.getItem("last_modified"), 25, function (e){
 		updatePushView(e);
 	});
 }
@@ -178,12 +178,12 @@ function scroller(evt){
 	var y = yOffset + window.innerHeight;
 	if(y >= contentHeight) {
 		var lastPush = document.getElementById("push_container").lastChild;
-			getPush(lastPush.id,function(e){
-				getFirstCreatedPush(function(fe){
+			getPushDB(lastPush.id,function(e){
+				getFirstCreatedPushDB(function(fe){
 					if (fe.created < e.created) {
 						if (!pushesIsUpdating) {
 						console.log("List more 25 pushes from DB");
-						ListPushes(e.created, 25, function (e){
+						listPushesDB(e.created, 25, function (e){
 							updatePushView(e);
 						});}
 					}
@@ -287,7 +287,7 @@ function logout () {
 	if (websocket != null) {
         websocket.close();
     }
-	clearDatabase();
+	clearDB();
 	localStorage.clear();
 	localStorage.setItem("login","0");
 	location.reload();
@@ -298,7 +298,10 @@ var notification;
 function showNotification(pnn){
 	function notiClick(){
 		console.log('Notification clicked');
-		navigator.mozApps.getSelf().onsuccess = function(e) { e.target.result.launch();	}
+		navigator.mozApps.getSelf().onsuccess = function(e) {
+			e.target.result.launch();
+			}
+		window.scroll(0,0);
 		dismissAll(pnn);
         this.close();	
 		}	
@@ -310,7 +313,7 @@ function showNotification(pnn){
 	}
 	if (pnn.length == 1) {
 		console.log('Creating one notification');
-		getPush(pnn[0],function(e){
+		getPushDB(pnn[0],function(e){
 		console.log('Notification '+ e);
 		var title = e.title;
 		var options = {
@@ -337,10 +340,11 @@ function showNotification(pnn){
 		function addTitle(e){
 			options.body +=  e.title + "\n";
 			notification = new Notification(title,options);
+			notification.onclick = notiClick;
 			
 		}
 		for (var i = 0; i < pnn.length; i++) {
-			getPush(pnn[i],addTitle);	
+			getPushDB(pnn[i],addTitle);	
 		}
 		console.log('Notification created');
 		return
