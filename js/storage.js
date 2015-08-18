@@ -71,7 +71,7 @@ function getNotDismissedPushesDB(f){
                cursor.continue();
            }
            else {
-               console.log("Get "+notDissmissedIdens.length+"not dismissed.");
+               console.log("Get "+notDissmissedIdens.length+" not dismissed.");
                f(notDissmissedIdens);
            };
        }
