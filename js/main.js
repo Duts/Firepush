@@ -71,6 +71,7 @@ function logout() {
 	if (websocket != null) {
         websocket.close();
     }
+	if (notification) {notification.close();}
 	clearDB();
 	localStorage.clear();
 	localStorage.setItem("login","0");
