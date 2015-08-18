@@ -6,36 +6,34 @@
 
 var pushesIsUpdating = false;
 
+function loginRQ(){
+	var login_request = new XMLHttpRequest();
+	login_request.open("GET","https://api.pushbullet.com/v2/users/me",false);
+	login_request.setRequestHeader("Authorization", "Bearer "+localStorage.getItem("token"));
+	login_request.send();
+	console.log(login_request);
+	var parse_login = JSON.parse(login_request.responseText);
+	if (login_request.readyState == 4 && login_request.status == 200) {
+		var email = "";
+		email +=  parse_login.email;
+		localStorage.setItem("email_user",email);
+		var name = "";
+		name += parse_login.name;
+		localStorage.setItem("name",name);
+		var avatar = "";
+		avatar += parse_login.image_url;
+		localStorage.setItem("avatar",avatar);
+		localStorage.setItem("login","1");
+		}else if(login_request.status == 403 || login_request.status == 401 || login_request.status == 400 || login_request.status == 404){
+			alert(parse_login.error.message);}	
+}
+
 if (!(localStorage.getItem("login")) || (localStorage.getItem("login") == 0)) {
-
-//Access
-var token = prompt("Type the your token for login");
-localStorage.setItem("token",token);
-var login_request = new XMLHttpRequest();
-login_request.open("GET","https://api.pushbullet.com/v2/users/me",false);
-login_request.setRequestHeader("Authorization", "Bearer "+localStorage.getItem("token"));
-login_request.send();
-console.log(login_request);
-
-var parse_login = JSON.parse(login_request.responseText);
-
-
-if (login_request.readyState == 4 && login_request.status == 200) {
-	var email = "";
-	email +=  parse_login.email;
-	localStorage.setItem("email_user",email);
-	var name = "";
-	name += parse_login.name;
-	localStorage.setItem("name",name);
-	var avatar = "";
-	avatar += parse_login.image_url;
-	localStorage.setItem("avatar",avatar);
-	localStorage.setItem("login","1");
-}else if(login_request.status == 403 || login_request.status == 401 || login_request.status == 400 || login_request.status == 404){
-	alert(parse_login.error.message);
-}
-
-}
+	//Access
+	var token = prompt("Type the your token for login");
+	localStorage.setItem("token",token);
+	loginRQ();
+	}
 
 if(localStorage.getItem("login") != 1){
 	if (!confirm("Try again?")) {
@@ -283,7 +281,7 @@ function dismissAll(pnn){
 
 
 
-function logout () {
+function logout() {
 	if (websocket != null) {
         websocket.close();
     }
