@@ -22,16 +22,17 @@ if (device_req.readyState == 4 && device_req.status == 200) {
 				for (var i = 0; i < parse_device.devices.length; i++) {
 					if(parse_device.devices[i].active == true){
 						var load_device = document.createElement("div");
+						load_device.setAttribute("class","device_container_style");
 						iden_device[i] = parse_device.devices[i].iden;
 
 						if (parse_device.devices[i].type == "windows") {
-							load_device.innerHTML = "&nbsp;<img src='images/pc.png' /> "+parse_device.devices[i].nickname;
+							load_device.innerHTML = "<img src='images/pc.png' class='dev_img' /><h3>"+parse_device.devices[i].nickname+"</h3>";
 						}else if(parse_device.devices[i].type == "android"){
-							load_device.innerHTML = "&nbsp;<img src='images/phone.png' /> "+parse_device.devices[i].nickname;
+							load_device.innerHTML = "<img src='images/phone.png' class='dev_img' /><h3>"+parse_device.devices[i].nickname+"</h3>";
 						}else if(parse_device.devices[i].type == "firefox" || parse_device.devices[i].type == "chrome" || parse_device.devices[i].type == "safari" || parse_device.devices[i].type == "IE"){
-							load_device.innerHTML = "&nbsp;<img src='images/browser.png' /> "+parse_device.devices[i].nickname;					
+							load_device.innerHTML = "<img src='images/browser.png' class='dev_img' /><h3>"+parse_device.devices[i].nickname+"</h3>";					
 						}else{
-							load_device.innerHTML = parse_device.devices[i].nickname;	
+							load_device.innerHTML = "<h3>"+parse_device.devices[i].nickname+"</h3>";
 						}
 						if (parse_device.devices[i].active == true) {
 						var trash_device = document.createElement("img");
@@ -39,7 +40,8 @@ if (device_req.readyState == 4 && device_req.status == 200) {
 					 	trash_device.setAttribute("class","trash");
 					 	trash_device.setAttribute("title",i);
 					 	trash_device.setAttribute("onclick","del_device("+i+")");
-						document.getElementById("devices").appendChild(trash_device);
+						load_device.appendChild(trash_device);
+						//document.getElementById("devices").appendChild(trash_device);
 						};
 					}
 					document.getElementById('devices').appendChild(load_device);
