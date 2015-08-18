@@ -32,9 +32,7 @@ function deletePush(e){
 	if (confirm("Would you really delete this push?")){
 		var iden = this.parentNode.id;
 		console.log("Deleting push: " + iden);
-		del(iden);
-//		delPushDB(iden);
-//		this.parentNode.remove();
+		deletePushRQ(iden);
 		}
 }
 
@@ -78,7 +76,7 @@ var updatePushes = function updatePushes(last_modified, f) {
 }
 
 
-function note () {
+function sendNoteRQ() {
 	title = document.getElementById('note_title').value;
 	body = document.getElementById('note_body').value;
 	note_req = new XMLHttpRequest();
@@ -91,7 +89,7 @@ function note () {
 	location.reload();
 }
 
-function link(){
+function sendLinkRQ(){
 	title = document.getElementById('link_title').value;
 	body = document.getElementById('link_body').value;
 	url = document.getElementById('link_url').value;
@@ -105,7 +103,7 @@ function link(){
 	location.reload();
 }
 
-function del(iden) {
+function deletePushRQ(iden) {
 	var del = new XMLHttpRequest();
 	del.open("DELETE","https://api.pushbullet.com/v2/pushes/"+iden,false);
 	del.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
@@ -113,10 +111,10 @@ function del(iden) {
 	console.log(del);
 }
 
-function dismiss(a) {
+function dismissRQ(iden) {
 	console.log("Dismissing "+ a );
 	var dis = new XMLHttpRequest();
-	dis.open("POST","https://api.pushbullet.com/v2/pushes/"+a,false);
+	dis.open("POST","https://api.pushbullet.com/v2/pushes/"+iden,false);
 	dis.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
 	dis.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	var blob = '{"dismissed": true}';
@@ -127,7 +125,7 @@ function dismiss(a) {
 function dismissAll(pnn){
 	console.log("Dismissing all pushes");
 	for (var i = 0; i < pnn.length; i++) {
-		dismiss(pnn[i]);
+		dismissRQ(pnn[i]);
 	}
 }
 
