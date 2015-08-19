@@ -23,6 +23,7 @@ THE SOFTWARE.
 */
 
 var pushesIsUpdating = false;
+var notDismissedPushes = [];
 
 function loginRQ(){
 	var login_request = new XMLHttpRequest();
@@ -76,7 +77,10 @@ function updatePushesRQ(last_modified, f) {
 						if (localStorage.getItem("last_modified") < parse_push.pushes[i].modified) { localStorage.setItem("last_modified",parse_push.pushes[i].modified); }
 						}
 					}
-				getNotDismissedPushesDB(showNotification);
+				getNotDismissedPushesDB(function(e){
+					notDismissedPushes = e;
+					showNotification(notDismissedPushes)}
+									   );
 			});
 		}else if(push_request.status == 400 || push_request.status == 401 || push_request.status == 403 || push_request.status == 404){
 			alert(parse_push.error.message);

@@ -38,13 +38,14 @@ if(localStorage.getItem("login") != 1){
 	}
 }
 
+
 updatePushesRQ(localStorage.getItem("last_modified"));
 updateDevicesRQ();
 
 listPushesDB(localStorage.getItem("last_modified"), 25, updatePushView);
 listDevicesDB(updateDeviceView);
 
-window.addEventListener('scroll', scroller, false ); 
+window.addEventListener('scroll', scroller, false );
 
 function scroller(evt){
 	var wrap = document.getElementById("push_container");
@@ -76,6 +77,7 @@ function scroller(evt){
 				});
 			});
 		}
+	dismissVisiblePushes();
 }
 
 window.addEventListener('load', function () {
@@ -119,3 +121,21 @@ function changeOfflineStatus(){
 }  
 
 startWebSocket();
+
+document.addEventListener('visibilitychange', handleVisibilityChange);
+
+function handleVisibilityChange(){
+	dismissVisiblePushes();
+}
+
+function dismissVisiblePushes(){
+	if (!document.hidden){
+	for (var i = 0; i < notDismissedPushes.length; i++) {
+		var pushTop    = document.getElementById(notDismissedPushes[i]).getBoundingClientRect().top,
+       		pushBottom = document.getElementById(notDismissedPushes[i]).getBoundingClientRect().bottom;
+		if (pushTop >= 0 && pushBottom <= window.innerHeight) {
+			console.log( "The push "+notDismissedPushes[i]+" is visible, dismissing it." );
+			dismissRQ(notDismissedPushes[i])}
+		}
+	}
+}

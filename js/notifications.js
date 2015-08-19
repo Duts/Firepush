@@ -31,8 +31,8 @@ function showNotification(pnn){
 			e.target.result.launch();
 			}
 		window.scroll(0,0);
-		dismissAll(pnn);
-        this.close();	
+		//dismissAll(pnn);
+        //this.close();	
 		}	
 
 	if (notification && (pnn.length == 0)) {
