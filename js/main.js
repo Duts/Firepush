@@ -105,6 +105,7 @@ function logout() {
         websocket.close();
     }
 	if (notification) {notification.close();}
+	removeAllAlarms(function(){});
 	clearDB();
 	localStorage.clear();
 	localStorage.setItem("login","0");
