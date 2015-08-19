@@ -183,7 +183,8 @@ function startWebSocket(){
 	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	if(localStorage.getItem("login") == 1 && navigator.onLine) {
 		console.log( "Trying to connect websocket...");
-		websocket = new ReconnectingWebSocket('wss://stream.pushbullet.com/websocket/' +localStorage.getItem("token"));
+		if (!websocket)	{websocket = new ReconnectingWebSocket('wss://stream.pushbullet.com/websocket/' +localStorage.getItem("token"));}
+			else {websocket.open()}
 		websocket.reconnectInterval = 5000;
 		websocket.onopen = function(e) { console.log( "WebSocket opened") }
 		websocket.onmessage = function(e) {
@@ -199,7 +200,7 @@ function startWebSocket(){
         		}
 			
 		}
-	    websocket.onerror = function(e) { console.log( "WebSocket error") }
-    	websocket.onclose = function(e) { console.log( "WebSocket closed"); }
+	    websocket.onerror = function(e) { console.log( "WebSocket error"); }
+    	websocket.onclose = function(e) { console.log( "WebSocket closed"); setAlarm(defAlarmDelayClose);}
 	}
 }

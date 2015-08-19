@@ -33,8 +33,9 @@
 		"url": "https://www.github.com/RDuts/Pushbullet"
 	},
 	"permissions": {
-  		"desktop-notification": { "description": "Needed for creating system notifications." }
+  		"desktop-notification": { "description": "Needed for creating system notifications." },
+		"alarms": { "description": "Required to schedule wakeups if internet is unstable"}
 	},
-	"messages": [{"notification": "/index.html"}]
+	"messages": [{"notification": "/index.html"}, { "alarm": "/index.html" }]
 	
 }

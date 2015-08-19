@@ -25,6 +25,7 @@ THE SOFTWARE.
 var justStarted = true;
 
 if (window.navigator.onLine) {startOnlineActions()}
+	else {setAlarm(defAlarmDelayOffline)}
 
 function startOnlineActions(){
 	if (!(localStorage.getItem("login")) || (localStorage.getItem("login") == 0)) {
@@ -132,3 +133,5 @@ document.addEventListener('visibilitychange', handleVisibilityChange);
 function handleVisibilityChange(){
 	dismissVisiblePushes();
 }
+
+navigator.mozSetMessageHandler('alarm',alarmHandler);
