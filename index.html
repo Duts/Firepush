@@ -73,8 +73,13 @@
 <div id="push_container"></div>
   
 <script type="text/javascript">
-//Show some things
-p = document.getElementById("hello").innerHTML ='<div style="text-align: left"><img class="avatar" src="'+localStorage.getItem("avatar") + '"></div><h2>'+ localStorage.getItem("name") + "<br />" + localStorage.getItem("email_user") + '</h2>'; 
+hello = document.getElementById("hello");
+var ava = localStorage.getItem("avatar");
+hello.innerHTML ='<div><img class="avatar" src="'+ava+ '">';
+if (ava.indexOf("missing-image") > -1) {
+  hello.innerHTML += '<span class="avatar_fl">'+localStorage.getItem("name").substr(0, 1); +'</span>'; 
+  }
+hello.innerHTML +='<h2>'+ localStorage.getItem("name") + "<br />" + localStorage.getItem("email_user") + '</h2></div>';
 </script>
   
 <script>
