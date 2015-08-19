@@ -22,25 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-if (!(localStorage.getItem("login")) || (localStorage.getItem("login") == 0)) {
-	//Access
-	var token = prompt("Type the your token for login");
-	localStorage.setItem("token",token);
-	loginRQ();
+var justStarted = true;
+
+if (window.navigator.onLine) {startOnlineActions()}
+
+function startOnlineActions(){
+	if (!(localStorage.getItem("login")) || (localStorage.getItem("login") == 0)) {
+		//Access
+		var token = prompt("Type the your token for login");
+		localStorage.setItem("token",token);
+		loginRQ();
+		}
+
+	if(localStorage.getItem("login") != 1){
+		if (!confirm("Try again?")) {
+			alert("You're redirected to your pushbullet account, copy the token and try again");
+			window.location.replace("https://www.pushbullet.com/account");
+		}else{
+			window.location.reload();
+			}
 	}
-
-if(localStorage.getItem("login") != 1){
-	if (!confirm("Try again?")) {
-		alert("You're redirected to your pushbullet account, copy the token and try again");
-		window.location.replace("https://www.pushbullet.com/account");
-	}else{
-		window.location.reload();
-	}
-}
-
-
-updatePushesRQ(localStorage.getItem("last_modified"));
-updateDevicesRQ();
+	updatePushesRQ(localStorage.getItem("last_modified"));
+	updateDevicesRQ();
+	startWebSocket();
+	justStarted = false;
+}	
 
 listPushesDB(localStorage.getItem("last_modified"), 25, updatePushView);
 listDevicesDB(updateDeviceView);
@@ -111,7 +117,8 @@ window.addEventListener('offline', changeOfflineStatus);
 function changeOnlineStatus(){
 	console.log( "Go online");
 	if (websocket != null) { websocket.open();}	
-		else {startWebSocket();}
+	//	else {startWebSocket();}
+	if (justStarted) {startOnlineActions()}
 }  
 
   
@@ -120,22 +127,8 @@ function changeOfflineStatus(){
 	if (websocket != null) { websocket.close(); }	
 }  
 
-startWebSocket();
-
 document.addEventListener('visibilitychange', handleVisibilityChange);
 
 function handleVisibilityChange(){
 	dismissVisiblePushes();
-}
-
-function dismissVisiblePushes(){
-	if (!document.hidden){
-	for (var i = 0; i < notDismissedPushes.length; i++) {
-		var pushTop    = document.getElementById(notDismissedPushes[i]).getBoundingClientRect().top,
-       		pushBottom = document.getElementById(notDismissedPushes[i]).getBoundingClientRect().bottom;
-		if (pushTop >= 0 && pushBottom <= window.innerHeight) {
-			console.log( "The push "+notDismissedPushes[i]+" is visible, dismissing it." );
-			dismissRQ(notDismissedPushes[i])}
-		}
-	}
 }

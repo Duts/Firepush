@@ -172,3 +172,15 @@ function deleteDevice(e){
 		deleteDeviceRQ(iden);
 		}
 }
+
+function dismissVisiblePushes(){
+	if (!document.hidden){
+	for (var i = 0; i < notDismissedPushes.length; i++) {
+		var pushTop    = document.getElementById(notDismissedPushes[i]).getBoundingClientRect().top,
+       		pushBottom = document.getElementById(notDismissedPushes[i]).getBoundingClientRect().bottom;
+		if (pushTop >= 0 && pushBottom <= window.innerHeight) {
+			console.log( "The push "+notDismissedPushes[i]+" is visible, dismissing it." );
+			dismissRQ(notDismissedPushes[i])}
+		}
+	}
+}

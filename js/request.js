@@ -24,8 +24,10 @@ THE SOFTWARE.
 
 var pushesIsUpdating = false;
 var notDismissedPushes = [];
+var websocket;
 
 function loginRQ(){
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	var login_request = new XMLHttpRequest();
 	login_request.open("GET","https://api.pushbullet.com/v2/users/me",false);
 	login_request.setRequestHeader("Authorization", "Bearer "+localStorage.getItem("token"));
@@ -49,6 +51,7 @@ function loginRQ(){
 
 
 function updatePushesRQ(last_modified, f) {
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	pushesIsUpdating = true;
 	if (last_modified == undefined) {last_modified = 0}
 	var push_request = new XMLHttpRequest();
@@ -79,7 +82,9 @@ function updatePushesRQ(last_modified, f) {
 					}
 				getNotDismissedPushesDB(function(e){
 					notDismissedPushes = e;
-					showNotification(notDismissedPushes)}
+					dismissVisiblePushes();
+					showNotification(notDismissedPushes);	
+					}
 									   );
 			});
 		}else if(push_request.status == 400 || push_request.status == 401 || push_request.status == 403 || push_request.status == 404){
@@ -92,6 +97,7 @@ function updatePushesRQ(last_modified, f) {
 
 
 function sendNoteRQ() {
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	title = document.getElementById('note_title').value;
 	body = document.getElementById('note_body').value;
 	note_req = new XMLHttpRequest();
@@ -101,10 +107,10 @@ function sendNoteRQ() {
 	var blob = '{"type": "note", "title": "'+title+'", "body": "'+body+'"}';
 	note_req.send(blob);
 	console.log(note_req);
-	location.reload();
 }
 
 function sendLinkRQ(){
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	title = document.getElementById('link_title').value;
 	body = document.getElementById('link_body').value;
 	url = document.getElementById('link_url').value;
@@ -115,10 +121,10 @@ function sendLinkRQ(){
 	var blob = '{"type": "link", "title": "'+title+'", "body": "'+body+'", "url": "'+url+'"}';
 	note_req.send(blob);
 	console.log(note_req);
-	location.reload();
 }
 
 function deletePushRQ(iden) {
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	var del = new XMLHttpRequest();
 	del.open("DELETE","https://api.pushbullet.com/v2/pushes/"+iden,false);
 	del.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
@@ -127,6 +133,7 @@ function deletePushRQ(iden) {
 }
 
 function dismissRQ(iden) {
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	console.log("Dismissing "+ iden );
 	var dis = new XMLHttpRequest();
 	dis.open("POST","https://api.pushbullet.com/v2/pushes/"+iden,false);
@@ -138,6 +145,7 @@ function dismissRQ(iden) {
 }
 
 function dismissAll(pnn){
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	console.log("Dismissing all pushes");
 	for (var i = 0; i < pnn.length; i++) {
 		dismissRQ(pnn[i]);
@@ -145,6 +153,7 @@ function dismissAll(pnn){
 }
 
 function updateDevicesRQ(){
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	var device_req = new XMLHttpRequest();
 	device_req.open("GET","https://api.pushbullet.com/v2/devices",true);
 	device_req.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
@@ -161,6 +170,7 @@ function updateDevicesRQ(){
 }
 
 function deleteDeviceRQ(iden){
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	var del_dev = new XMLHttpRequest();
 	del_dev.open("DELETE","https://api.pushbullet.com/v2/devices/"+iden,false);
 	del_dev.setRequestHeader("Authorization","Bearer "+localStorage.getItem("token"));
@@ -168,10 +178,9 @@ function deleteDeviceRQ(iden){
 	console.log(del_dev);
 }
 
-var websocket;
-
 function startWebSocket(){
 	// WebSocket initialization
+	if (!window.navigator.onLine) {console.log("We offline!"); return}
 	if(localStorage.getItem("login") == 1 && navigator.onLine) {
 		console.log( "Trying to connect websocket...");
 		websocket = new ReconnectingWebSocket('wss://stream.pushbullet.com/websocket/' +localStorage.getItem("token"));
