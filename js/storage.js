@@ -23,9 +23,8 @@ THE SOFTWARE.
 */
 
 var indexedDB 	  = window.indexedDB
-    IDBTransaction  = window.IDBTransaction
 const    baseName 	  = "pushbulletBase";
-const    baseVersion   = 3;
+const    baseVersion   = 1;
 const    storeName 	  = "pushStore";
 const    deviceStoreName   = "deviceStore";
 
@@ -40,8 +39,7 @@ function connectDB(f){
         f(request.result);
     }
     request.onupgradeneeded = function(e){
-        if (baseVersion < 2 ) {var store = e.currentTarget.transaction.objectStore(storeName);}
-           else {var store = e.currentTarget.result.createObjectStore(storeName, { keyPath: "iden" });}
+        var store = e.currentTarget.result.createObjectStore(storeName, { keyPath: "iden" });
         store.createIndex("created", "created", { unique: false });
         var deviceStore = e.currentTarget.result.createObjectStore(deviceStoreName, { keyPath: "iden" });
         deviceStore.createIndex("created", "created", { unique: false });
