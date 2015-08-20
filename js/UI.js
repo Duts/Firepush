@@ -34,24 +34,12 @@ function updatePushView(push,prevPush){
 	var type = push.type;
 	switch (type) {
 		case "note": {
-				if (push.title == undefined || push.title == null) {
-					kid.innerHTML = "<img src='images/note_image.png' class='im' /><h2>"+push.sender_name+"</h2><p>"+push.body+"</p>";
-				}else{
-					kid.innerHTML = "<img src='images/note_image.png' class='im' /><h2>"+push.sender_name+"</h2><h3>"+push.title+"</h3><p>"+push.body+"</p>";
-					}
+				kid.innerHTML = "<img src='images/note_image.png' class='im' /><h2>"+push.sender_name+"</h2><h3>"+(push.title ? push.title : "")+"</h3><p>"+(push.body ? push.body : "") +"</p>";
 				break
 				}
 		case "link": {
-				if (push.body == undefined || push.body == null) {
-					var body_link =	"<p><a href='"+push.url+"'>"+push.url+"</a></p>";
-				}else{
-					var body_link =	"<p>"+push.body+"<br /><a href='"+push.url+"'>"+push.url+"</a></p>";
-				}
-				if (push.title == undefined || push.title == null) {
-					kid.innerHTML = "<img src='images/link_image.png' class='im' /><h2>"+push.sender_name+"</h2>"+body_link;
-				}else{
-					kid.innerHTML = "<img src='images/link_image.png' class='im' /><h2>"+push.sender_name+"</h2><h3>"+push.title+"</h3>"+body_link;
-				}
+				var body_link =	"<p>"+(push.body ? push.body : "")+"<br /><a href='"+push.url+"'>"+push.url+"</a></p>";
+				kid.innerHTML = "<img src='images/link_image.png' class='im' /><h2>"+push.sender_name+"</h2><h3>"+(push.title ? push.title : "")+"</h3>"+body_link;
 				break
 				}
 		case "address":{

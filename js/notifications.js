@@ -44,10 +44,10 @@ function showNotification(pnn){
 		console.log('Creating one notification');
 		getPushDB(pnn[0],function(e){
 		console.log('Notification '+ e);
-		var title = e.title;
+		var title = e.title ? e.title : "";
 		var options = {
 			tag: "Pushbullet",
-    		body: e.body,
+			body: e.body ? e.body : "",
     		icon: "images/icon64.png"
   			}
 		notification = new Notification(title,options);
@@ -67,7 +67,7 @@ function showNotification(pnn){
   			}
 		
 		function addTitle(e){
-			options.body +=  e.title + "\n";
+			options.body +=  (e.title ? e.title: "") + "\n";
 			notification = new Notification(title,options);
 			notification.onclick = notiClick;
 			
