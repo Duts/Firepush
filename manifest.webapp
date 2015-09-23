@@ -13,6 +13,10 @@
 		"it": {
 			"name": "Pushbullet",
 			"description": "Port di Pushbullet per Firefox OS. Attualmente non è una versione ufficiale."
+		},
+		"ru": {
+			"name": "Pushbullet",
+			"description": "Это неофициальное приложение Pushbullet для Firefox OS."
 		}
 	},
 	"orientation": ["portrait","landscape"],
@@ -27,5 +31,11 @@
 	"developer": {
 		"name": "{Duts}",
 		"url": "https://www.github.com/RDuts/Pushbullet"
-	}
+	},
+	"permissions": {
+  		"desktop-notification": { "description": "Needed for creating system notifications." },
+		"alarms": { "description": "Required to schedule wakeups if internet is unstable"}
+	},
+	"messages": [{"notification": "/index.html"}, { "alarm": "/index.html" }]
+	
 }

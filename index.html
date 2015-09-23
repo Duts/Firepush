@@ -8,8 +8,14 @@
 <link rel="stylesheet" href="css/second.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/main_style.css">
+<script type="text/javascript" src="js/reconnecting-websocket/reconnecting-websocket.js"></script>
+<script type="text/javascript" src="js/storage.js"></script>
+<script type="text/javascript" src="js/notifications.js"></script>
+<script type="text/javascript" src="js/UI.js"></script>
+<script type="text/javascript" src="js/alarm.js"></script>
 <script type="text/javascript" src="js/request.js"></script>
-<script type="text/javascript" src="js/device.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+
 <title>Pushbullet</title>
 <!-- IE Specific to remove tap highlight -->
 <meta name="msapplication-tap-highlight" content="no"></head>
@@ -23,21 +29,21 @@
   </button>
 
   <h1 class="logo">
-    <a href="index.html">All</a>
+    <p onclick="location.reload();">All</p>
   </h1>
 
-    <div id="hello" align="right"></div>
+    
 
 </header>
 <nav class="navdrawer-container">
 
-  <ul class="promote-layer"><label><b>Pushes</b></label>
+  <ul class="promote-layer"><li id="hello"></li>
     <li>
       <a onclick="show_note()">Note</a>
       <div id="notes" style="display:none;">
         <label>Title:<input type="text" id="note_title"></label>
         <label>Body:<input type="text" id="note_body"></label>
-        <button onclick="note();">Push</button>
+        <button onclick="sendNoteRQ();">Push</button>
       </div>
     </li>
     <li>
@@ -46,12 +52,12 @@
         <label>Title:<input type="text" id="link_title"></label>
         <label>Body:<input type="text" id="link_body"></label>
         <label>Link:<input type="url" id="link_url"></label>
-        <button onclick="link();">Push</button>
+        <button onclick="sendLinkRQ();">Push</button>
       </div>
     </li>
     <li>
-      <a id="bb">Devices</a>
-      <div id="devices"></div>
+      <a onclick="show_devices()">Devices</a>
+      <div id="devices_container" style="display:none;"></div>
     </li>
     <li>
       <a href="" onclick="logout();">Logout</a>
@@ -66,17 +72,20 @@
 <br />
 
 <div id="push_container"></div>
-
-
+  
 <script type="text/javascript">
-//Show some things
-p = document.getElementById("hello").innerHTML = localStorage.getItem("name") + "<br />" + localStorage.getItem("email_user"); 
+hello = document.getElementById("hello");
+var ava = localStorage.getItem("avatar");
+hello.innerHTML ='<div><img class="avatar" src="'+ava+ '">';
+if (ava.indexOf("missing-image") > -1) {
+  hello.innerHTML += '<span class="avatar_fl">'+localStorage.getItem("name").substr(0, 1); +'</span>'; 
+  }
+hello.innerHTML +='<h2>'+ localStorage.getItem("name") + "<br />" + localStorage.getItem("email_user") + '</h2></div>';
 </script>
-
+  
 <script>
 var navdrawerContainer = document.querySelector('.navdrawer-container');
 var appbarElement = document.querySelector('.app-bar');
-
 var menuBtn = document.querySelector('.menu');
 menuBtn.addEventListener('click', function() {
 var isOpen = navdrawerContainer.classList.contains('open');
@@ -93,9 +102,11 @@ var isOpen = navdrawerContainer.classList.contains('open');
 var menuBtn = document.querySelector('.menu');
 menuBtn.addEventListener('click', function() {
 }, true);
-
 var bottomBtns = document.querySelectorAll('.bottom-bar > button');
 for(var i = 0; i < bottomBtns.length; i++) {
   bottomBtns[i].addEventListener('click', bottomBarBtnClick, true);
 }
-</script>
+</script>  
+
+</body> 
+  

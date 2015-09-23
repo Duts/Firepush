@@ -18,8 +18,13 @@ html, body {
       }
 
 .trash{
-  float: right;
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  opacity: 0.4;
 }
+
+
 #setting_box{
   margin: 10%;
   height: 100px;
@@ -29,11 +34,12 @@ html, body {
   z-index: 9999;
 }
 .im{
-  margin-top: 5px;
-  margin-left: 5px;
-  height: 45px;
-  width: 45px;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  height: 3rem;
+  width: 3rem;
   border-radius: 50%;
+  float: left;
 }
 .im_push{
   margin-top: 5px;
@@ -47,11 +53,53 @@ html, body {
 }
 
 .push_container_style{
+  min-height: 5rem;
   height: auto;
   width: auto;
   margin-bottom: 5px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   background-color: #fefefe;
+  position: relative;
 }
+.push_container_style h2 {
+font-size: 1.1em;
+margin-left: 5rem;
+margin-right: 1.5rem
+}
+.push_container_style h3 {
+font-size: 1em;
+margin-left: 5rem;
+margin-right: 1.5rem
+}
+.push_container_style p {
+margin-left: 5rem;
+margin-right: 1.5rem;
+margin-bottom: 0;
+}
+
+.device_container_style{
+  height: 3rem;
+  width: auto;
+  margin-bottom: 5px;
+  padding-bottom: 0.5rem;
+  background-color: #fefefe;
+  position: relative;
+}
+
+.device_container_style h3 {
+  font-size: 0.9em;
+  padding-top: 0.95rem;
+  margin-left: 3.5rem;
+}
+
+.dev_img{
+  margin: 0.5rem;
+  margin-left: 1rem;
+  position: absolute;
+  border-radius: 50%;
+}
+
       .app-bar {
         display: -ms-flexbox;
         display: -webkit-flex;
@@ -451,3 +499,26 @@ background-color: rgba(0, 0, 0, 0.39);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
       }
+      .promote-layer h2 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 1rem;
+        font-size: 1em;
+        text-align: left;
+      }
+.avatar {
+ margin: 1rem;
+ margin-bottom: 0.5rem;
+ height: 3rem;
+ width: 3rem;
+ border-radius: 50%;
+}
+.avatar_fl {
+    position: absolute;
+    top: 0.4rem;
+    left: 1rem;
+    margin: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
